@@ -218,7 +218,7 @@ class _WriteScreenState extends State<WriteScreen> {
       ],
     );
   }
-
+/*
   Widget _buildDesTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,52 +260,8 @@ class _WriteScreenState extends State<WriteScreen> {
       ],
     );
   }
-/*
-  Widget _buildStoryTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Story',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.topLeft,
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.8),
-              border: Border.all(color: Colors.redAccent),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(
-                  color: Colors.grey[800].withOpacity(0.5),
-                  spreadRadius: 3,
-                  blurRadius: 5,
-                  offset: Offset(1.0,0)// changes position of shadow
-              ),]
-          ),
-          height: 160.0,
-          child: TextField(
-            controller: _storyController,
-            keyboardType: TextInputType.multiline,
-            textInputAction: TextInputAction.newline,
-            maxLines: null,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
 
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(14.0),
-              hintText: 'Enter Story',
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-*/
+  */
   Widget _buildNextBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
@@ -373,7 +329,7 @@ class _WriteScreenState extends State<WriteScreen> {
                       SizedBox(height: 10.0,),
                       _buildTitleTF(),
                       SizedBox(height: 10.0,),
-                      _buildDesTF(),
+                     // _buildDesTF(),
                       SizedBox(height: 10.0,),
                       _image == null ? RaisedButton(
                         child: Text(

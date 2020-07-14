@@ -88,10 +88,7 @@ class GridList extends StatelessWidget{
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
-                                );
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => HorrorScreen()),);
                               },
                               padding: EdgeInsets.all(0.0),
                             )

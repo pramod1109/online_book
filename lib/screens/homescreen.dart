@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:online_book/screens/ProfileScreen.dart';
 import 'package:online_book/screens/home_screen_cat.dart';
-import 'package:online_book/screens/login_screen.dart';
 import 'package:online_book/screens/write_screen.dart';
-import 'package:online_book/views/home_grid.dart';
 
-List<String> _contents = <String>['Home', 'Write','Notification','More'];
+List<String> _contents = <String>['Home', 'Write','Notification','More','Library'];
 
 class HomeScreen extends StatefulWidget {
 
@@ -71,6 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text(_contents[2]),
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.library_books),
+          title: Text(_contents[4]),
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.more_vert),
           title: Text(_contents[3]),
         ),
@@ -93,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               size: 35.0,
               ),
             onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
             },
           ),
         ],
@@ -133,6 +136,8 @@ class BottomNavContents extends StatelessWidget {
       case 1:
         return WriteScreen();
       case 2:
+        return Text("Coming soon");
+      case 3:
         return Text("Coming soon");
       default:
         return Text("Coming soon");
