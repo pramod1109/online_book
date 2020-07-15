@@ -66,6 +66,7 @@ flutter:
     - assets/images/3.jpeg
     - assets/images/4.jpeg
     - assets/images/as.png
+    - assets/images/download.png
     #   - images/a_dot_burr.jpeg
     #   - images/a_dot_ham.jpeg
   fonts:

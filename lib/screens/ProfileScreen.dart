@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:online_book/screens/homescreen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -7,15 +14,53 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen>
-    with SingleTickerProviderStateMixin {
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = new GoogleSignIn();
+
+
   bool _status = true;
+  DateTime dob;
   final FocusNode myFocusNode = FocusNode();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
+
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+
+  String name;
+  String imageUrl;
+
+  File _image;
+
+  final databaseReference = Firestore.instance;
+
+  void _update() async {
+    final FirebaseUser user = await firebaseAuth.currentUser();
+     databaseReference.collection("users").document(user.displayName).setData(
+        {
+          "Name" : _nameController.text,
+          "Date Of Birth": dob,
+          "Mobile": _mobileController.text,
+          "state": _stateController.text,
+          "city": _cityController.text
+    });
+    // if(databaseReference.collection('request').document(id).get()!=null)
+  }
+
+  Future<String> _getCurrentUser() async {
+    final FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    setState(() {
+      name= user.displayName.toString();
+    });
+    return name;
+  }
 
   @override
-  void initState() {
-    // TODO: implement initState
+  Future<void> initState(){
     super.initState();
+    dob =DateTime.now();
   }
 
   @override
@@ -79,14 +124,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 child: new Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    new CircleAvatar(
+                                    !_status ?new CircleAvatar(
                                       backgroundColor: Colors.red,
                                       radius: 25.0,
-                                      child: new Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.white,
+                                      child: IconButton(
+                                        icon: Icon(Icons.camera_alt,
+                                          color: Colors.white,
+                                          ),
+                                        onPressed: pickImage,
                                       ),
-                                    )
+                                    ): new Container()
                                   ],
                                 )),
                           ]),
@@ -114,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'Parsonal Information',
+                                        'Personal Information',
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold),
@@ -157,7 +204,9 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
                                   new Flexible(
-                                    child: new TextField(
+                                    child: _getCurrentUser() != null ? Text(name)  : new TextField(
+                                      controller: _nameController,
+                                      keyboardType: TextInputType.text,
                                       decoration: const InputDecoration(
                                         hintText: "Enter Your Name",
                                       ),
@@ -179,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'Email ID',
+                                        'Date Of Birth',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -195,10 +244,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
                                   new Flexible(
-                                    child: new TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Enter Email ID"),
-                                      enabled: !_status,
+                                    child: ListTile(
+                                      title: Text("${dob.day}/${dob.month}/${dob.year}"),
+                                      trailing: Icon(Icons.keyboard_arrow_down),
+                                      onTap: _pickDate,
                                     ),
                                   ),
                                 ],
@@ -231,6 +280,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 children: <Widget>[
                                   new Flexible(
                                     child: new TextField(
+                                      controller: _mobileController,
+                                      keyboardType: TextInputType.number,
                                       decoration: const InputDecoration(
                                           hintText: "Enter Mobile Number"),
                                       enabled: !_status,
@@ -248,7 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   Expanded(
                                     child: Container(
                                       child: new Text(
-                                        'Pin Code',
+                                        'State',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -259,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   Expanded(
                                     child: Container(
                                       child: new Text(
-                                        'State',
+                                        'City',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -280,8 +331,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     child: Padding(
                                       padding: EdgeInsets.only(right: 10.0),
                                       child: new TextField(
+                                        controller: _stateController,
+                                        keyboardType: TextInputType.text,
                                         decoration: const InputDecoration(
-                                            hintText: "Enter Pin Code"),
+                                            hintText: "Enter State"),
                                         enabled: !_status,
                                       ),
                                     ),
@@ -289,8 +342,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   ),
                                   Flexible(
                                     child: new TextField(
+                                      controller: _cityController,
+                                      keyboardType: TextInputType.text,
                                       decoration: const InputDecoration(
-                                          hintText: "Enter State"),
+                                          hintText: "Enter City"),
                                       enabled: !_status,
                                     ),
                                     flex: 2,
@@ -385,5 +440,44 @@ class _ProfileScreenState extends State<ProfileScreen>
         });
       },
     );
+  }
+  Future<String> pickImage() async {
+    //Get the file from the image picker and store it
+    final pickedFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image=pickedFile;
+    });
+  }
+
+  _pickDate() async{
+    if(!_status) {
+      DateTime date = await showDatePicker(
+        context: context,
+        firstDate: DateTime(DateTime
+            .now()
+            .year - 150),
+        lastDate: DateTime(DateTime
+            .now()
+            .year + 5),
+        initialDate: dob,
+      );
+
+      if (date != null) {
+        setState(() {
+          dob = date;
+        });
+      }
+    }
+  }
+
+  Future<String> _uploadFile() async {
+    try {
+      final StorageReference storageRef = FirebaseStorage.instance.ref().child(_nameController.text +"-Profileimage/");
+      final StorageUploadTask task = storageRef.putFile(_image);
+      return await (await task.onComplete).ref.getDownloadURL();
+    } catch (error) {
+      print(error.toString());
+      throw error.toString();
+    }
   }
 }

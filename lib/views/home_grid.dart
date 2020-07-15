@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:online_book/screens/horror.dart';
+import 'package:online_book/screens/ListScreen.dart';
 import 'package:online_book/utilites/constants.dart';
 
 class GridList extends StatelessWidget{
@@ -52,7 +52,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "కథలు")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -88,7 +88,7 @@ class GridList extends StatelessWidget{
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => HorrorScreen()),);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ListScreen(cat: "కవితలు")),);
                               },
                               padding: EdgeInsets.all(0.0),
                             )
@@ -125,7 +125,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat:"సంపాదకీయం")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -163,7 +163,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "భావ స్పందన")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -201,7 +201,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "గ్రంథ సమీక్ష")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -239,7 +239,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "బాలతరంగిణి")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -277,7 +277,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "హాస్యం")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -315,7 +315,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "నవలలు")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -353,7 +353,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "బాల సాహిత్యం")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -391,7 +391,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "బాల వ్యాఖ్య")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -429,7 +429,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "నానీలు")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -467,7 +467,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "చిత్ర వ్యాఖ్య")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -505,7 +505,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "చిత్ర కథ")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -543,7 +543,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "భావగీతం")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -581,7 +581,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "చిత్ర కవిత")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
@@ -619,7 +619,7 @@ class GridList extends StatelessWidget{
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HorrorScreen()),
+                                  MaterialPageRoute(builder: (context) => ListScreen(cat: "కార్టూన్ వ్యాఖ్య")),
                                 );
                               },
                               padding: EdgeInsets.all(0.0),
