@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_book/screens/homescreen.dart';
+import 'package:online_book/screens/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -352,7 +353,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ],
                               )),
-                          !_status ? _getActionButtons() : new Container(),
+                          !_status ? _getActionButtons() : new RaisedButton(
+                            elevation: 1.0,
+                            onPressed: _signOut,
+                            padding: EdgeInsets.all(2.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            color: Colors.redAccent,
+                            child: Text(
+                              'LOGOUT',
+                              style: TextStyle(
+                                color: Colors.white,
+                                letterSpacing: 1.5,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w300,
+                                fontFamily: 'OpenSans',
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -479,5 +498,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print(error.toString());
       throw error.toString();
     }
+  }
+  _signOut() async {
+    await firebaseAuth.signOut();
+    _googleSignIn.disconnect();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
   }
 }

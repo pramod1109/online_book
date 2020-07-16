@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:online_book/screens/ProfileInput.dart';
 import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/screens/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class IntroScreen extends StatefulWidget{
 
@@ -17,11 +19,23 @@ class _IntroScreenState extends State<IntroScreen> {
     super.initState();
     FirebaseAuth.instance.currentUser().then((res) {
       print(res);
+      final snapShot = Firestore.instance
+          .collection("user")
+          .document(res.uid)
+          .get();
       if (res != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),
-        );
+            if (snapShot != null) {
+                Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),
+                );
+            }
+            else{
+              Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileInputScreen()),
+              );
+            }
       }
       else
       {

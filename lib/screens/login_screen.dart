@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:online_book/screens/ProfileInput.dart';
 import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/screens/signup_screen.dart';
 import 'package:online_book/utilites/constants.dart';
@@ -308,7 +309,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onTap: () async{
             final FirebaseUser user = await _auth.currentUser();
             if(user!=null){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileInputScreen()),);
             }
           },
           child: Stack(
@@ -389,7 +390,7 @@ class _LoginScreenState extends State<LoginScreen> {
     print("signed in " + user.displayName);
     if(user!=null){
       print("sucessfull");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileInputScreen()),);
     }
     return user;
   }
@@ -413,7 +414,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _success = false;
     }
     if(user!=null){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileInputScreen()),);
     }
   }
 }

@@ -117,6 +117,8 @@ class _ListScreenState extends State<ListScreen> {
                                           height: 62.0,
                                           width: 30.0,
                                           child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                            
                                             children: <Widget>[
                                               IconButton(
                                                 icon: Icon(Icons.thumb_up),
@@ -176,7 +178,6 @@ class Story extends StatelessWidget {
         data: story['story'],
         style: {
           "body": Style(
-            backgroundColor: Colors.black12,
             fontSize: FontSize(18.0),
 //              color: Colors.white,
           ),
