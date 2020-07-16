@@ -5,41 +5,38 @@ import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class IntroScreen extends StatefulWidget{
-
-
+class IntroScreen extends StatefulWidget {
   @override
   _IntroScreenState createState() => _IntroScreenState();
 }
 
 class _IntroScreenState extends State<IntroScreen> {
-
   @override
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((res) {
       print(res);
-      final snapShot = Firestore.instance
-          .collection("user")
-          .document(res.uid)
-          .get();
       if (res != null) {
-            if (snapShot != null) {
-                Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),
-                );
-            }
-            else{
-              Navigator.pushReplacement(
+        final snapShot = Firestore.instance
+            .collection("user")
+            .document(res.uid)
+            .get()
+            .then((value) {
+          if (value.data != null) {
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ProfileInputScreen()),
-              );
-            }
-      }
-      else
-      {
-        Navigator.push(
+              MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfileInputScreen(res.uid)),
+            );
+          }
+        });
+      } else {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
         );

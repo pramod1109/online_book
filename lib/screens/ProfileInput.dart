@@ -2,46 +2,48 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_book/screens/homescreen.dart';
-import 'package:online_book/screens/login_screen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final databaseReference = Firestore.instance;
-
 class ProfileInputScreen extends StatefulWidget {
+  String uid;
+
+  ProfileInputScreen(this.uid);
+
   @override
   _ProfileInputState createState() => _ProfileInputState();
 }
 
 class _ProfileInputState extends State<ProfileInputScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
 
+  int month = 1, day = 1;
+  String year = '2001';
+
+  int maxday;
+  bool uploading = false;
 
   @override
   void initState() {
-    super.initState();
-    FirebaseAuth.instance.currentUser().then((res) {
+    /*FirebaseAuth.instance.currentUser().then((res) async {
       print(res);
-      final snapShot = Firestore.instance
+      await Firestore.instance
           .collection("user")
           .document(res.uid)
-          .get();
-
-      if (snapShot != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),
-        );
-      }
-    });
+          .get()
+          .then((value) {
+        if (value.data != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),
+          );
+        }
+      });
+    });*/
+    super.initState();
   }
-
 
   Widget _buildNameTF() {
     return Column(
@@ -60,7 +62,6 @@ class _ProfileInputState extends State<ProfileInputScreen> {
             controller: _nameController,
             keyboardType: TextInputType.text,
             style: TextStyle(
-
               color: Colors.white,
               fontFamily: 'OpenSans',
             ),
@@ -72,42 +73,6 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                 color: Colors.white,
               ),
               hintText: 'Enter your Name',
-              hintStyle: kHintTextStyle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAgeTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Age',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            controller: _ageController,
-            keyboardType: TextInputType.number,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Age',
               hintStyle: kHintTextStyle,
             ),
           ),
@@ -131,7 +96,6 @@ class _ProfileInputState extends State<ProfileInputScreen> {
           height: 60.0,
           child: TextField(
             controller: _phoneController,
-            obscureText: true,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -140,82 +104,10 @@ class _ProfileInputState extends State<ProfileInputScreen> {
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                Icons.lock,
+                Icons.phone,
                 color: Colors.white,
               ),
               hintText: 'Enter your Phone Number',
-              hintStyle: kHintTextStyle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCityTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'City',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            controller: _cityController,
-            obscureText: true,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your City',
-              hintStyle: kHintTextStyle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStateTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'State',
-          style: kLabelStyle,
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
-          height: 60.0,
-          child: TextField(
-            controller: _stateController,
-            obscureText: true,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your State',
               hintStyle: kHintTextStyle,
             ),
           ),
@@ -252,6 +144,25 @@ class _ProfileInputState extends State<ProfileInputScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (month == 1 ||
+        month == 3 ||
+        month == 5 ||
+        month == 7 ||
+        month == 8 ||
+        month == 10 ||
+        month == 12) {
+      maxday = 31;
+    } else if (month == 2) {
+      if (int.parse(year) % 4 == 0 &&
+          (int.parse(year) % 100 != 0 ||
+              (int.parse(year) % 100 == 0 && int.parse(year) % 400 == 0))) {
+        maxday = 29;
+      } else {
+        maxday = 28;
+      }
+    } else {
+      maxday = 30;
+    }
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         key: _formKey,
@@ -276,9 +187,6 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
                 ),
-              ),
-              Container(
-                height: double.infinity,
                 child: SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.symmetric(
@@ -300,19 +208,121 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                       SizedBox(height: 10.0),
                       _buildNameTF(),
                       SizedBox(height: 30.0),
-                      _buildAgeTF(),
-                      SizedBox(height: 30.0),
                       _buildPhoneTF(),
-                      SizedBox(height: 20.0),
-                      _buildCityTF(),
-                      SizedBox(height: 20.0),
-                      _buildStateTF(),
+                      SizedBox(height: 30.0),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Date of Birth',
+                          style: kLabelStyle,
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: kBoxDecorationStyle,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            height: 70.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  'Month',
+                                  style: kLabelStyle,
+                                ),
+                                DropdownButton(
+                                  items: List.generate(12, (index) {
+                                    return DropdownMenuItem(
+                                      child: Text('${index + 1}'),
+                                      value: index + 1,
+                                    );
+                                  }),
+                                  value: month,
+                                  onChanged: (v) {
+                                    setState(() {
+                                      month = v;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: kBoxDecorationStyle,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            height: 70.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  'Day',
+                                  style: kLabelStyle,
+                                ),
+                                DropdownButton(
+                                  items: List.generate(maxday, (index) {
+                                    return DropdownMenuItem(
+                                      child: Text('${index + 1}'),
+                                      value: index + 1,
+                                    );
+                                  }),
+                                  value: day,
+                                  onChanged: (v) {
+                                    setState(() {
+                                      day = v;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            decoration: kBoxDecorationStyle,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            height: 70.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  'Year',
+                                  style: kLabelStyle,
+                                ),
+                                DropdownButton(
+                                  items: List.generate(100, (index) {
+                                    return DropdownMenuItem(
+                                      child: Text('${1920 + index}'),
+                                      value: '${1920 + index}',
+                                    );
+                                  }),
+                                  value: year,
+                                  onChanged: (v) {
+                                    setState(() {
+                                      year = v;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 20.0),
                       _buildSubmitBtn(),
                     ],
                   ),
                 ),
-              )
+              ),
+              if (uploading)
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[CircularProgressIndicator()],
+                  ),
+                )
             ],
           ),
         ),
@@ -321,22 +331,24 @@ class _ProfileInputState extends State<ProfileInputScreen> {
   }
 
   void _submit() async {
-    try{
-      final FirebaseUser user = await _auth.currentUser();
-      final uid = user.uid;
-      databaseReference.collection("user").document(uid).setData(
-        {
-          "name": _nameController.text,
-          "age":  _ageController.text,
-          "phone":_phoneController.text,
-          "city": _cityController.text,
-          "state":_stateController.text,
-          "liked": null
-        }
+    setState(() {
+      uploading = true;
+    });
+    try {
+      await Firestore.instance.collection("user").document(widget.uid).setData({
+        "name": _nameController.text,
+        "phone": _phoneController.text,
+        'dob': {'day': day, 'month': month, 'year': year},
+        "liked": null
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                  uid: widget.uid,
+                )),
       );
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
-
-    }catch(e){
+    } catch (e) {
       print(e.message);
     }
   }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_book/screens/ProfileInput.dart';
@@ -6,7 +7,6 @@ import 'package:online_book/screens/signup_screen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 
 final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account){
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       setState(() {
         _currentUser = account;
       });
@@ -251,13 +251,13 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildSocialBtn(
-                () => print('Login with Facebook'),
+            () => print('Login with Facebook'),
             AssetImage(
               'assets/logos/facebook.jpg',
             ),
           ),
           _buildGoogleBtn(
-                () => _signInWithGoole(),
+            () => _signInWithGoole(),
             AssetImage(
               'assets/logos/google.jpg',
             ),
@@ -306,11 +306,14 @@ class _LoginScreenState extends State<LoginScreen> {
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
-          onTap: () async{
-            final FirebaseUser user = await _auth.currentUser();
-            if(user!=null){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileInputScreen()),);
-            }
+          onTap: () async {
+            /*final FirebaseUser user = await _auth.currentUser();
+            if (user != null) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileInputScreen()),
+              );
+            }*/
           },
           child: Stack(
             children: <Widget>[
@@ -353,7 +356,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 30.0),
                       _buildEmailTF(),
-                      SizedBox(height: 30.0,),
+                      SizedBox(
+                        height: 30.0,
+                      ),
                       _buildPasswordTF(),
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
@@ -375,10 +380,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<FirebaseUser> _signInWithGoole() async {
     print("google signin pressed");
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     setState(() {
-      _isLoggedIn=true;
+      _isLoggedIn = true;
     });
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -386,16 +392,34 @@ class _LoginScreenState extends State<LoginScreen> {
       idToken: googleAuth.idToken,
     );
 
-    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
     print("signed in " + user.displayName);
-    if(user!=null){
+    if (user != null) {
       print("sucessfull");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileInputScreen()),);
+      await Firestore.instance
+          .collection("user")
+          .document(user.uid)
+          .get()
+          .then((value) {
+        if (value.data != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen(uid: user.uid)),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfileInputScreen(user.uid)),
+          );
+        }
+      });
     }
     return user;
   }
 
-  Future<void> _handleSignOut() async{
+  Future<void> _handleSignOut() async {
     _googleSignIn.disconnect();
   }
 
@@ -413,12 +437,11 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       _success = false;
     }
-    if(user!=null){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileInputScreen()),);
+    if (user != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProfileInputScreen(user.uid)),
+      );
     }
   }
 }
-
-
-
-
