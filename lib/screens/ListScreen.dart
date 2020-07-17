@@ -200,16 +200,31 @@ class _ListScreenState extends State<ListScreen> {
                                       Icons.share,
                                       color: Colors.redAccent,
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      await Firestore.instance
+                                          .runTransaction((transaction) async {
+                                        var predata = await transaction.get(
+                                            Firestore.instance
+                                                .collection(widget.cat)
+                                                .document(ds.documentID));
+                                        await transaction.update(
+                                            Firestore.instance
+                                                .collection(widget.cat)
+                                                .document(ds.documentID),
+                                            {
+                                              'share': predata.data['share'] + 1
+                                            });
+                                      });
+                                    },
                                   ),
-                                  /*Text(
+                                  Text(
                                     ds['share'].toString(),
                                     style: TextStyle(
                                       fontSize: 10.0,
                                       fontWeight: FontWeight.w100,
                                       fontFamily: 'OpenSans',
                                     ),
-                                  )*/
+                                  )
                                 ],
                               ),
                             ),
