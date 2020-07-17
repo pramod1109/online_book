@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:online_book/views/home_grid.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
+// ignore: must_be_immutable
 class HomeFirst extends StatelessWidget {
   String uid;
 
@@ -25,7 +26,7 @@ class HomeFirst extends StatelessWidget {
               ],
               dotSize: 4.0,
               dotSpacing: 15.0,
-              dotColor: Colors.redAccent,
+              dotColor: Color(0xff61A4F1),
               indicatorBgPadding: 5.0,
               dotBgColor: Colors.redAccent[100].withOpacity(0),
               moveIndicatorFromBottom: 180.0,

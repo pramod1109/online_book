@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_book/screens/ProfileScreen.dart';
-import 'package:online_book/screens/home_screen_cat.dart';
+import 'package:online_book/screens/home_first.dart';
 import 'package:online_book/screens/write_screen.dart';
 
 List<String> _contents = <String>[
@@ -54,9 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _myBottomNavBar() {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
-      selectedItemColor: Colors.redAccent,
+      selectedItemColor: Color(0xff61A4F1),
       unselectedItemColor: Colors.black.withOpacity(0.5),
       showUnselectedLabels: true,
+      type: BottomNavigationBarType.fixed,
       elevation: 100.0,
       onTap: _onTapItem,
       items: [
@@ -86,39 +87,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('E-book'),
-        backgroundColor: Colors.redAccent,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.person_outline,
-              color: Colors.white,
-              size: 35.0,
+    return MaterialApp(
+        title: 'భావతరంగిణి',
+        debugShowCheckedModeBanner: false,
+        home:Scaffold(
+            appBar: AppBar(
+              title: Image.asset('assets/images/Logo_Bhavatarangini.png',fit: BoxFit.contain, height: 64,
+              ),
+              backgroundColor: Color(0xff61A4F1),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.person_outline,
+                    color: Colors.white,
+                    size: 35.0,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
+                  },
+                ),
+              ],
             ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()));
-            },
-          ),
-        ],
-      ),
-      body: BottomNavContents(
-        index: _currentIndex,
-        uid: widget.uid,
-      ),
-      bottomNavigationBar: _myBottomNavBar(),
-    );
+
+            body: BottomNavContents(
+              index: _currentIndex,
+              uid: widget.uid,
+            ),
+            bottomNavigationBar: _myBottomNavBar(),
+    ));
   }
 
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle = TextStyle(
-    color: Colors.redAccent,
-    fontFamily: 'OpenSans',
-    fontSize: 30.0,
-    fontWeight: FontWeight.bold,
-  );
 }
 
 class BottomNavContents extends StatelessWidget {

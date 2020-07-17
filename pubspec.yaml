@@ -67,6 +67,8 @@ flutter:
     - assets/images/4.jpeg
     - assets/images/as.png
     - assets/images/download.png
+    - assets/images/Logo_Bhavatarangini.png
+    - assets/images/Splash_Screen.png
     #   - images/a_dot_burr.jpeg
     #   - images/a_dot_ham.jpeg
   fonts:

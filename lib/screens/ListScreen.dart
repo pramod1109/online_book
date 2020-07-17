@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -14,29 +15,26 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   final databaseReference = Firestore.instance;
+  String uid;
 
-  _updateLikes(String doc, int likes) async {
-    await databaseReference
-        .collection(widget.cat)
-        .document(doc)
-        .updateData({'likes': likes + 1});
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.currentUser().then((res) {
+      print(res);
+      uid=res.uid;
+    });
   }
 
-  _updateRead(String doc, int reads, DocumentSnapshot index) async {
-    await databaseReference
-        .collection(widget.cat)
-        .document(doc)
-        .updateData({'reads': reads + 1});
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => Story(story: index)));
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: const Text('E-book'),
-        backgroundColor: Colors.redAccent,
+      appBar: AppBar(
+        title: Image.asset('assets/images/Logo_Bhavatarangini.png',fit: BoxFit.contain, height: 64,
+        ),
+        backgroundColor: Color(0xff61A4F1),
       ),
       body: StreamBuilder(
         stream: Firestore.instance.collection(widget.cat).snapshots(),
@@ -49,193 +47,193 @@ class _ListScreenState extends State<ListScreen> {
               DocumentSnapshot ds = snapshot.data.documents[index];
               return Card(
                   child: Row(
-                children: <Widget>[
-                  Container(
-                      height: 100.0,
-                      width: 80.0,
-                      padding: EdgeInsets.all(17.0),
-                      decoration: new BoxDecoration(
-                        borderRadius:
-                            new BorderRadius.all(const Radius.circular(3.0)),
-                        image: new DecorationImage(
-                          image: new AssetImage('assets/images/1.jpeg'),
-                          fit: BoxFit.cover,
+                  children: <Widget>[
+                    Container(
+                        height: 100.0,
+                        width: 80.0,
+                        padding: EdgeInsets.all(17.0),
+                        decoration: new BoxDecoration(
+                          borderRadius:
+                              new BorderRadius.all(const Radius.circular(3.0)),
+                          image: new DecorationImage(
+                            image: new AssetImage('assets/images/1.jpeg'),
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+                        SizedBox(
+                          width: 5.0,
                         ),
-                      )),
-                  SizedBox(
-                    width: 5.0,
-                  ),
-                  Container(
-                      width: 180.0,
-                      child: Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              ds['title'],
-                              style: TextStyle(fontSize: 28.0),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              "రచయిత: " + ds['author'],
-                              style: TextStyle(fontSize: 18.0),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          Container(
-                            child: Row(
+                        Container(
+                            width: 180.0,
+                            child: Column(
                               children: <Widget>[
-                                Text(ds['reads'].toString() + " views"),
-                                SizedBox(
-                                  width: 5.0,
-                                ),
-                                FlatButton.icon(
-                                    onPressed: null,
-                                    icon: Icon(
-                                      Icons.file_download,
-                                      color: Colors.redAccent,
-                                    ),
-                                    label: Text(
-                                      "గ్రంధాలయం",
-                                      style: TextStyle(color: Colors.black),
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ],
-                      )),
-                  Container(
-                    width: 80.0,
-                    child: Column(
-                      children: <Widget>[
-                        RaisedButton(
-                          elevation: 1.0,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Story(
-                                        story: ds,
-                                      )),
-                            );
-                          },
-                          padding: EdgeInsets.all(2.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          color: Colors.redAccent,
-                          child: Text(
-                            'చదవండి',
-                            style: TextStyle(
-                              color: Colors.white,
-                              letterSpacing: 1.5,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: 'OpenSans',
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              height: 62.0,
-                              width: 30.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.thumb_up,
-                                      color: ds['likes'].contains(widget.uid)
-                                          ? Colors.redAccent
-                                          : Colors.black54,
-                                    ),
-                                    onPressed: () async {
-                                      if (!ds['likes'].contains(widget.uid)) {
-                                        await Firestore.instance
-                                            .collection(widget.cat)
-                                            .document(ds.documentID)
-                                            .updateData({
-                                          'likes': FieldValue.arrayUnion(
-                                              [widget.uid])
-                                        });
-                                      } else {
-                                        await Firestore.instance
-                                            .collection(widget.cat)
-                                            .document(ds.documentID)
-                                            .updateData({
-                                          'likes': FieldValue.arrayRemove(
-                                              [widget.uid])
-                                        });
-                                      }
-                                    },
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    ds['title'],
+                                    style: TextStyle(fontSize: 28.0),
+                                    textAlign: TextAlign.left,
                                   ),
-                                  Text(
-                                    ds['likes'].length.toString(),
-                                    style: TextStyle(
-                                      fontSize: 10.0,
-                                      fontWeight: FontWeight.w100,
-                                      fontFamily: 'OpenSans',
-                                    ),
-                                  )
-                                ],
+                                ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "రచయిత: " + ds['author'],
+                                    style: TextStyle(fontSize: 18.0),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(ds['reads'].toString() + " views"),
+                                      SizedBox(
+                                        width: 5.0,
+                                      ),
+                                      FlatButton.icon(
+                                          onPressed: null,
+                                          icon: Icon(
+                                            Icons.file_download,
+                                            color: Colors.redAccent,
+                                          ),
+                                          label: Text(
+                                            "గ్రంధాలయం",
+                                            style: TextStyle(color: Colors.black),
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )),
+                        Container(
+                          width: 80.0,
+                          child: Column(
+                            children: <Widget>[
+                              RaisedButton(
+                                elevation: 1.0,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Story(
+                                              story: ds,
+                                            )),
+                                  );
+                                },
+                                padding: EdgeInsets.all(2.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                color: Colors.redAccent,
+                                child: Text(
+                                  'చదవండి',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    letterSpacing: 1.5,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w300,
+                                    fontFamily: 'OpenSans',
+                                  ),
+                                ),
                               ),
+                              Row(
+                                children: <Widget>[
+                                  Container(
+                                    height: 62.0,
+                                    width: 30.0,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.thumb_up,
+                                            color: ds['likes'].contains(widget.uid)
+                                                ? Colors.redAccent
+                                                : Colors.black54,
+                                          ),
+                                          onPressed: () async {
+                                            if (!ds['likes'].contains(uid)) {
+                                              await Firestore.instance
+                                                  .collection(widget.cat)
+                                                  .document(ds.documentID)
+                                                  .updateData({
+                                                'likes': FieldValue.arrayUnion(
+                                                    [uid])
+                                              });
+                                            } else {
+                                              await Firestore.instance
+                                                  .collection(widget.cat)
+                                                  .document(ds.documentID)
+                                                  .updateData({
+                                                'likes': FieldValue.arrayRemove(
+                                                    [uid])
+                                              });
+                                            }
+                                          },
+                                        ),
+                                        Text(
+                                          ds['likes'].length.toString(),
+                                          style: TextStyle(
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.w100,
+                                            fontFamily: 'OpenSans',
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Container(
+                                    height: 62.0,
+                                    width: 30.0,
+                                    child: Column(
+                                      children: <Widget>[
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.share,
+                                            color: Colors.redAccent,
+                                          ),
+                                          onPressed: () async {
+                                            await Firestore.instance
+                                                .runTransaction((transaction) async {
+                                              var predata = await transaction.get(
+                                                  Firestore.instance
+                                                      .collection(widget.cat)
+                                                      .document(ds.documentID));
+                                              await transaction.update(
+                                                  Firestore.instance
+                                                      .collection(widget.cat)
+                                                      .document(ds.documentID),
+                                                  {
+                                                    'share': predata.data['share'] + 1
+                                                  });
+                                            });
+                                          },
+                                        ),
+                                        Text(
+                                          ds['share'].toString(),
+                                          style: TextStyle(
+                                            fontSize: 10.0,
+                                            fontWeight: FontWeight.w100,
+                                            fontFamily: 'OpenSans',
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
                             ),
                             SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              height: 62.0,
-                              width: 30.0,
-                              child: Column(
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.share,
-                                      color: Colors.redAccent,
-                                    ),
-                                    onPressed: () async {
-                                      await Firestore.instance
-                                          .runTransaction((transaction) async {
-                                        var predata = await transaction.get(
-                                            Firestore.instance
-                                                .collection(widget.cat)
-                                                .document(ds.documentID));
-                                        await transaction.update(
-                                            Firestore.instance
-                                                .collection(widget.cat)
-                                                .document(ds.documentID),
-                                            {
-                                              'share': predata.data['share'] + 1
-                                            });
-                                      });
-                                    },
-                                  ),
-                                  Text(
-                                    ds['share'].toString(),
-                                    style: TextStyle(
-                                      fontSize: 10.0,
-                                      fontWeight: FontWeight.w100,
-                                      fontFamily: 'OpenSans',
-                                    ),
-                                  )
-                                ],
-                              ),
+                              height: 4,
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                      ],
-                    ),
-                  )
+                      )
                 ],
               ));
             },
