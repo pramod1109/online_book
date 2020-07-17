@@ -1,24 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_book/screens/ProfileScreen.dart';
 import 'package:online_book/screens/home_screen_cat.dart';
 import 'package:online_book/screens/write_screen.dart';
 
-List<String> _contents = <String>['Home', 'Write','Notification','More','Library'];
+List<String> _contents = <String>[
+  'Home',
+  'Write',
+  'Notification',
+  'More',
+  'Library'
+];
 
 class HomeScreen extends StatefulWidget {
-
   final uid;
   HomeScreen({@required this.uid});
-
-
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   int _currentIndex = 0;
   final _auth = FirebaseAuth.instance;
 
@@ -29,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     getCurrentUser();
   }
+
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
@@ -82,26 +86,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('E-book'),
-          backgroundColor: Colors.redAccent,
+        backgroundColor: Colors.redAccent,
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.person_outline,
               color: Colors.white,
               size: 35.0,
-              ),
+            ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()));
             },
           ),
         ],
       ),
-      body:BottomNavContents(
+      body: BottomNavContents(
         index: _currentIndex,
+        uid: widget.uid,
       ),
       bottomNavigationBar: _myBottomNavBar(),
     );
@@ -117,8 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class BottomNavContents extends StatelessWidget {
-  BottomNavContents({this.index});
   final int index;
+  String uid;
+  BottomNavContents({this.index, this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +138,7 @@ class BottomNavContents extends StatelessWidget {
   Widget navBarContents(int index, BuildContext context) {
     switch (index) {
       case 0:
-        return HomeFirst();
+        return HomeFirst(uid);
       case 1:
         return WriteScreen();
       case 2:
