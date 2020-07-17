@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/screens/login_screen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,8 +17,16 @@ class _SignUpState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _success;
-  String _userEmail,_userPass;
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
+  int month = 1, day = 1;
+  String year = '2001';
+
+  int maxday;
+  bool uploading = false;
+
+  String gender = 'Male';
 
   Widget _buildNameTF() {
     return Column(
@@ -32,6 +42,7 @@ class _SignUpState extends State<SignUpScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _nameController,
             keyboardType: TextInputType.text,
             style: TextStyle(
               color: Colors.white,
@@ -125,44 +136,39 @@ class _SignUpState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildForgotPasswordBtn() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 0.0),
-        child: Text(
-          'Forgot Password?',
+  Widget _buildPhoneTF() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Phone Number',
           style: kLabelStyle,
         ),
-      ),
-    );
-  }
-
-  Widget _buildRememberMeCheckbox() {
-    return Container(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: _success,
-              checkColor: Colors.green,
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  _success = value;
-                });
-              },
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height: 60.0,
+          child: TextField(
+            keyboardType: TextInputType.number,
+            controller: _phoneController,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.phone,
+                color: Colors.white,
+              ),
+              hintText: 'Enter your Phone Number',
+              hintStyle: kHintTextStyle,
             ),
           ),
-          Text(
-            'keep me sign in',
-            style: kLabelStyle,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -195,10 +201,7 @@ class _SignUpState extends State<SignUpScreen> {
   Widget _buildSignupBtn() {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-        );
+        Navigator.pop(context);
       },
       child: RichText(
         text: TextSpan(
@@ -227,6 +230,25 @@ class _SignUpState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (month == 1 ||
+        month == 3 ||
+        month == 5 ||
+        month == 7 ||
+        month == 8 ||
+        month == 10 ||
+        month == 12) {
+      maxday = 31;
+    } else if (month == 2) {
+      if (int.parse(year) % 4 == 0 &&
+          (int.parse(year) % 100 != 0 ||
+              (int.parse(year) % 100 == 0 && int.parse(year) % 400 == 0))) {
+        maxday = 29;
+      } else {
+        maxday = 28;
+      }
+    } else {
+      maxday = 30;
+    }
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         key: _formKey,
@@ -251,52 +273,219 @@ class _SignUpState extends State<SignUpScreen> {
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
                 ),
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+                child: SafeArea(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40.0,
+                      vertical: 20.0,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'OpenSans',
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10.0),
-                      _buildNameTF(),
-                      SizedBox(height: 30.0),
-                      _buildEmailTF(),
-                      SizedBox(height: 30.0),
-                      _buildPasswordTF(),
-                      SizedBox(height: 20.0),
-                      _buildRegisterBtn(),
-                      _buildSignupBtn(),
-                    ],
+                        SizedBox(height: 10.0),
+                        _buildNameTF(),
+                        SizedBox(height: 20.0),
+                        _buildEmailTF(),
+                        SizedBox(height: 20.0),
+                        _buildPasswordTF(),
+                        SizedBox(height: 20.0),
+                        _buildPhoneTF(),
+                        SizedBox(height: 20.0),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Date of Birth',
+                            style: kLabelStyle,
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    'Month',
+                                    style: kLabelStyle,
+                                  ),
+                                  DropdownButton(
+                                    items: List.generate(12, (index) {
+                                      return DropdownMenuItem(
+                                        child: Text('${index + 1}'),
+                                        value: index + 1,
+                                      );
+                                    }),
+                                    value: month,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        month = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    'Day',
+                                    style: kLabelStyle,
+                                  ),
+                                  DropdownButton(
+                                    items: List.generate(maxday, (index) {
+                                      return DropdownMenuItem(
+                                        child: Text('${index + 1}'),
+                                        value: index + 1,
+                                      );
+                                    }),
+                                    value: day,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        day = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    'Year',
+                                    style: kLabelStyle,
+                                  ),
+                                  DropdownButton(
+                                    items: List.generate(100, (index) {
+                                      return DropdownMenuItem(
+                                        child: Text('${1920 + index}'),
+                                        value: '${1920 + index}',
+                                      );
+                                    }),
+                                    value: year,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        year = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          decoration: kBoxDecorationStyle,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          height: 70.0,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                'Gender',
+                                style: kLabelStyle,
+                              ),
+                              DropdownButton(
+                                items: [
+                                  DropdownMenuItem(
+                                    child: Text('Male'),
+                                    value: 'Male',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text('Female'),
+                                    value: 'Female',
+                                  ),
+                                ],
+                                value: gender,
+                                onChanged: (v) {
+                                  setState(() {
+                                    gender = v;
+                                  });
+                                },
+                                isExpanded: true,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        _buildRegisterBtn(),
+                        _buildSignupBtn(),
+                      ],
+                    ),
                   ),
                 ),
-              )
+              ),
+              if (uploading)
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[CircularProgressIndicator()],
+                  ),
+                )
             ],
           ),
         ),
       ),
     );
   }
+
   void signUp() async {
-      try{
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      }catch(e){
-        print(e.message);
-      }
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text)
+          .then((value) async {
+        await Firestore.instance
+            .collection("user")
+            .document(value.user.uid)
+            .setData({
+          "name": _nameController.text,
+          "phone": _phoneController.text,
+          'dob': {'day': day, 'month': month, 'year': year},
+          'gender': gender,
+          'uid': value.user.uid,
+          "liked": null
+        });
+
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(uid: value.user.uid)));
+      });
+    } catch (e) {
+      print(e.message);
+    }
   }
 }

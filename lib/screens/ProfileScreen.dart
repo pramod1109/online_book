@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_book/screens/homescreen.dart';
+import 'package:online_book/screens/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
 
-  String name;
+  String name, gender;
   String imageUrl, mobile;
   bool imageChanged = false, uploading = false;
 
@@ -42,6 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         imageUrl = value.data['image'] ?? user.photoUrl;
         mobile = value.data['phone'];
         dob = value.data['dob'];
+        gender = value.data['gender'];
       });
     });
   }
@@ -63,6 +65,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: TextStyle(color: Colors.black),
           ),
           iconTheme: IconThemeData(color: Colors.black),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  if (_status) {
+                    FirebaseAuth.instance.signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (_) {
+                      return LoginScreen();
+                    }));
+                  }
+                },
+                child: Text(
+                  'Log Out',
+                  style: TextStyle(color: Colors.blue),
+                ))
+          ],
         ),
         body: Stack(
           children: <Widget>[
@@ -235,7 +253,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     title: Text(dob != null
                                         ? "${dob['day']}/${dob['month']}/${dob['year']}"
                                         : '-'),
-                                    trailing: Icon(Icons.keyboard_arrow_down),
+                                    trailing: Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color:
+                                          _status ? Colors.white : Colors.black,
+                                    ),
                                     onTap: _pickDate,
                                   ),
                                 ),
@@ -276,6 +298,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           decoration: const InputDecoration(
                                               hintText: "Enter Mobile Number"),
                                           enabled: !_status,
+                                        ),
+                                ),
+                              ],
+                            )),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: 25.0, right: 25.0, top: 25.0),
+                            child: new Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                new Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    new Text(
+                                      'Gender',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: 25.0, right: 25.0, top: 2.0),
+                            child: new Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                new Flexible(
+                                  child: _status
+                                      ? Text(gender ?? '-')
+                                      : DropdownButton(
+                                          items: [
+                                            DropdownMenuItem(
+                                              child: Text('Male'),
+                                              value: 'Male',
+                                            ),
+                                            DropdownMenuItem(
+                                              child: Text('Female'),
+                                              value: 'Female',
+                                            ),
+                                          ],
+                                          value: gender,
+                                          onChanged: (v) {
+                                            setState(() {
+                                              gender = v;
+                                            });
+                                          },
+                                          isExpanded: true,
                                         ),
                                 ),
                               ],
@@ -333,6 +406,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     "name": _nameController.text,
                     "dob": dob,
                     "phone": _mobileController.text,
+                    'gender': gender
                   });
                   if (imageChanged && _image != null) {
                     img = await _uploadFile();

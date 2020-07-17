@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,23 +26,10 @@ class _ProfileInputState extends State<ProfileInputScreen> {
   int maxday;
   bool uploading = false;
 
+  String gender = 'Male';
+
   @override
   void initState() {
-    /*FirebaseAuth.instance.currentUser().then((res) async {
-      print(res);
-      await Firestore.instance
-          .collection("user")
-          .document(res.uid)
-          .get()
-          .then((value) {
-        if (value.data != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),
-          );
-        }
-      });
-    });*/
     super.initState();
   }
 
@@ -95,6 +83,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            keyboardType: TextInputType.number,
             controller: _phoneController,
             style: TextStyle(
               color: Colors.white,
@@ -173,7 +162,6 @@ class _ProfileInputState extends State<ProfileInputScreen> {
             children: <Widget>[
               Container(
                 height: double.infinity,
-                width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -187,132 +175,172 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
                 ),
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Personal Details',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+                child: SafeArea(
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40.0,
+                      vertical: 30.0,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Personal Details',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'OpenSans',
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10.0),
-                      _buildNameTF(),
-                      SizedBox(height: 30.0),
-                      _buildPhoneTF(),
-                      SizedBox(height: 30.0),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Date of Birth',
-                          style: kLabelStyle,
+                        SizedBox(height: 10.0),
+                        _buildNameTF(),
+                        SizedBox(height: 30.0),
+                        _buildPhoneTF(),
+                        SizedBox(height: 30.0),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Date of Birth',
+                            style: kLabelStyle,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: kBoxDecorationStyle,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            height: 70.0,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  'Month',
-                                  style: kLabelStyle,
-                                ),
-                                DropdownButton(
-                                  items: List.generate(12, (index) {
-                                    return DropdownMenuItem(
-                                      child: Text('${index + 1}'),
-                                      value: index + 1,
-                                    );
-                                  }),
-                                  value: month,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      month = v;
-                                    });
-                                  },
-                                ),
-                              ],
+                        SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    'Month',
+                                    style: kLabelStyle,
+                                  ),
+                                  DropdownButton(
+                                    items: List.generate(12, (index) {
+                                      return DropdownMenuItem(
+                                        child: Text('${index + 1}'),
+                                        value: index + 1,
+                                      );
+                                    }),
+                                    value: month,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        month = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: kBoxDecorationStyle,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            height: 70.0,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  'Day',
-                                  style: kLabelStyle,
-                                ),
-                                DropdownButton(
-                                  items: List.generate(maxday, (index) {
-                                    return DropdownMenuItem(
-                                      child: Text('${index + 1}'),
-                                      value: index + 1,
-                                    );
-                                  }),
-                                  value: day,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      day = v;
-                                    });
-                                  },
-                                ),
-                              ],
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    'Day',
+                                    style: kLabelStyle,
+                                  ),
+                                  DropdownButton(
+                                    items: List.generate(maxday, (index) {
+                                      return DropdownMenuItem(
+                                        child: Text('${index + 1}'),
+                                        value: index + 1,
+                                      );
+                                    }),
+                                    value: day,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        day = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: kBoxDecorationStyle,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            height: 70.0,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text(
-                                  'Year',
-                                  style: kLabelStyle,
-                                ),
-                                DropdownButton(
-                                  items: List.generate(100, (index) {
-                                    return DropdownMenuItem(
-                                      child: Text('${1920 + index}'),
-                                      value: '${1920 + index}',
-                                    );
-                                  }),
-                                  value: year,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      year = v;
-                                    });
-                                  },
-                                ),
-                              ],
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    'Year',
+                                    style: kLabelStyle,
+                                  ),
+                                  DropdownButton(
+                                    items: List.generate(100, (index) {
+                                      return DropdownMenuItem(
+                                        child: Text('${1920 + index}'),
+                                        value: '${1920 + index}',
+                                      );
+                                    }),
+                                    value: year,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        year = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
+                          ],
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          decoration: kBoxDecorationStyle,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          height: 70.0,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                'Gender',
+                                style: kLabelStyle,
+                              ),
+                              DropdownButton(
+                                items: [
+                                  DropdownMenuItem(
+                                    child: Text('Male'),
+                                    value: 'Male',
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text('Female'),
+                                    value: 'Female',
+                                  ),
+                                ],
+                                value: gender,
+                                onChanged: (v) {
+                                  setState(() {
+                                    gender = v;
+                                  });
+                                },
+                                isExpanded: true,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 20.0),
-                      _buildSubmitBtn(),
-                    ],
+                        ),
+                        SizedBox(height: 20.0),
+                        _buildSubmitBtn(),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -339,6 +367,8 @@ class _ProfileInputState extends State<ProfileInputScreen> {
         "name": _nameController.text,
         "phone": _phoneController.text,
         'dob': {'day': day, 'month': month, 'year': year},
+        'gender': gender,
+        'uid': widget.uid,
         "liked": null
       });
       Navigator.pushReplacement(
