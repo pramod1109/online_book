@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_book/screens/ProfileInput.dart';
 import 'package:online_book/screens/homescreen.dart';
+import 'package:online_book/screens/phone_login.dart';
 import 'package:online_book/screens/signup_screen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -220,38 +221,28 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildGoogleBtn(Function onTap, AssetImage logo) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 60.0,
-        width: 60.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(0, 2),
-              blurRadius: 6.0,
-            ),
-          ],
-          image: DecorationImage(
-            image: logo,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildSocialBtnRow() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.0),
-      child: _buildGoogleBtn(
-        () => _signInWithGoole(),
-        AssetImage(
-          'assets/logos/google.jpg',
-        ),
+      padding: EdgeInsets.symmetric(vertical: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _buildSocialBtn(
+                () {Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PhoneLoginScreen()),
+                );},
+            AssetImage(
+              'assets/logos/phone.png',
+            ),
+          ),
+          _buildSocialBtn(
+                () => _signInWithGoole(),
+            AssetImage(
+              'assets/logos/google.jpg',
+            ),
+          ),
+        ],
       ),
     );
   }

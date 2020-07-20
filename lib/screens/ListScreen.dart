@@ -254,8 +254,9 @@ class Story extends StatelessWidget {
     print("read");
     return Scaffold(
         appBar: AppBar(
-          title: Text("Story"),
-          backgroundColor: Colors.redAccent,
+          title: Image.asset('assets/images/Logo_Bhavatarangini.png',fit: BoxFit.contain, height: 64,
+          ),
+          backgroundColor: Color(0xff61A4F1),
         ),
         body: SingleChildScrollView(
             child: Html(
