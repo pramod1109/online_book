@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:online_book/screens/PhoneProfileInput.dart';
 import 'package:online_book/screens/ProfileInput.dart';
 
 class PhoneLoginScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class PhoneLoginScreen extends StatelessWidget {
           uid=user.uid;
           if(user != null){
             Navigator.push(context, MaterialPageRoute(
-                builder: (context) => ProfileInputScreen(uid)
+                builder: (context) => PhoneProfileInputScreen(uid,_phoneController.text)
             ));
           }else{
             print("Error");
@@ -63,7 +64,7 @@ class PhoneLoginScreen extends StatelessWidget {
 
                         if(user != null){
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => ProfileInputScreen(uid)
+                              builder: (context) => PhoneProfileInputScreen(uid,_phoneController.text)
                           ));
                         }else{
                           print("Error");

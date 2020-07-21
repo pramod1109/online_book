@@ -45,7 +45,7 @@ class _SignUpState extends State<SignUpScreen> {
             controller: _nameController,
             keyboardType: TextInputType.text,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -53,7 +53,7 @@ class _SignUpState extends State<SignUpScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.account_box,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Name',
               hintStyle: kHintTextStyle,
@@ -81,7 +81,7 @@ class _SignUpState extends State<SignUpScreen> {
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -89,7 +89,7 @@ class _SignUpState extends State<SignUpScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.email,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Email',
               hintStyle: kHintTextStyle,
@@ -117,7 +117,7 @@ class _SignUpState extends State<SignUpScreen> {
             controller: _passwordController,
             obscureText: true,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -125,7 +125,7 @@ class _SignUpState extends State<SignUpScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.lock,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Password',
               hintStyle: kHintTextStyle,
@@ -153,7 +153,7 @@ class _SignUpState extends State<SignUpScreen> {
             keyboardType: TextInputType.number,
             controller: _phoneController,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -161,7 +161,7 @@ class _SignUpState extends State<SignUpScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.phone,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Phone Number',
               hintStyle: kHintTextStyle,
@@ -283,15 +283,7 @@ class _SignUpState extends State<SignUpScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'OpenSans',
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        Container(height: 100,child:Image.asset('assets/images/Logo_Bhavatarangini.png')),
                         SizedBox(height: 10.0),
                         _buildNameTF(),
                         SizedBox(height: 20.0),

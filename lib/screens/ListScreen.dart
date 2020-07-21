@@ -26,7 +26,9 @@ class _ListScreenState extends State<ListScreen> {
     });
   }
 
-
+  int check_like(){
+    databaseReference.collection(widget.cat).getDocuments();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +152,7 @@ class _ListScreenState extends State<ListScreen> {
                                         IconButton(
                                           icon: Icon(
                                             Icons.thumb_up,
-                                            color: ds['likes'].contains(widget.uid)
+                                            color: ds['likes'].contains(uid)
                                                 ? Colors.redAccent
                                                 : Colors.black54,
                                           ),

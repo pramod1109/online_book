@@ -6,19 +6,19 @@ import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class ProfileInputScreen extends StatefulWidget {
-  String uid;
+class PhoneProfileInputScreen extends StatefulWidget {
+  String uid,phone;
 
-  ProfileInputScreen(this.uid);
+  PhoneProfileInputScreen(this.uid,this.phone);
 
   @override
-  _ProfileInputState createState() => _ProfileInputState();
+  _PhoneProfileInputState createState() => _PhoneProfileInputState();
 }
 
-class _ProfileInputState extends State<ProfileInputScreen> {
+class _PhoneProfileInputState extends State<PhoneProfileInputScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   int month = 1, day = 1;
   String year = '2001';
@@ -69,12 +69,12 @@ class _ProfileInputState extends State<ProfileInputScreen> {
     );
   }
 
-  Widget _buildPhoneTF() {
+  Widget _buildEmailTF() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Phone Number',
+          'Email',
           style: kLabelStyle,
         ),
         SizedBox(height: 10.0),
@@ -83,20 +83,20 @@ class _ProfileInputState extends State<ProfileInputScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
-            keyboardType: TextInputType.number,
-            controller: _phoneController,
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
-                Icons.phone,
-                color: Colors.white,
+                Icons.email,
+                color: Colors.black,
               ),
-              hintText: 'Enter your Phone Number',
+              hintText: 'Enter your Email',
               hintStyle: kHintTextStyle,
             ),
           ),
@@ -104,6 +104,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
       ],
     );
   }
+
 
   Widget _buildSubmitBtn() {
     return Container(
@@ -189,7 +190,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                         SizedBox(height: 10.0),
                         _buildNameTF(),
                         SizedBox(height: 30.0),
-                        _buildPhoneTF(),
+                        _buildEmailTF(),
                         SizedBox(height: 30.0),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -206,7 +207,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                               alignment: Alignment.centerLeft,
                               decoration: kBoxDecorationStyle,
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               height: 70.0,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -236,7 +237,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                               alignment: Alignment.centerLeft,
                               decoration: kBoxDecorationStyle,
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               height: 70.0,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -266,7 +267,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                               alignment: Alignment.centerLeft,
                               decoration: kBoxDecorationStyle,
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              const EdgeInsets.symmetric(horizontal: 16),
                               height: 70.0,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -357,8 +358,9 @@ class _ProfileInputState extends State<ProfileInputScreen> {
     try {
       await Firestore.instance.collection("user").document(widget.uid).setData({
         "name": _nameController.text,
-        "phone": _phoneController.text,
+        "email": _emailController.text,
         'dob': {'day': day, 'month': month, 'year': year},
+        'phone': widget.phone,
         'gender': gender,
         'uid': widget.uid,
         "liked": null
@@ -367,8 +369,8 @@ class _ProfileInputState extends State<ProfileInputScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => HomeScreen(
-                  uid: widget.uid,
-                )),
+              uid: widget.uid,
+            )),
       );
     } catch (e) {
       print(e.message);

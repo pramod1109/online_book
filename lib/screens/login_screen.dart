@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.email,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Email',
               hintStyle: kHintTextStyle,
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
             controller: _passwordController,
             obscureText: true,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.lock,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Password',
               hintStyle: kHintTextStyle,
@@ -311,15 +311,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    'Sign In',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'OpenSans',
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Container(height: 100,child:Image.asset('assets/images/Logo_Bhavatarangini.png')),
                   SizedBox(height: 20.0),
                   _buildEmailTF(),
                   SizedBox(
