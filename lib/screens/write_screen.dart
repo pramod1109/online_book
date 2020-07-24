@@ -60,109 +60,145 @@ class _WriteScreenState extends State<WriteScreen> {
       return await (await task.onComplete).ref.getDownloadURL();
     } catch (error) {
       print(error.toString());
-      throw error.toString();
     }
+  }
+
+  Future<void> _showMyDialog(String mis) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Conformation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('$mis field is left empty'),
+                Text('Please do update it'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _noImageDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Conformation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Image field is left empty'),
+                Text('Do you want update it or continue'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Update'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text('Continue'),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EditorPage(title: _titleController.text,cat: _selectedCategory,imageUrl: null,user: name)),);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _next() async {
+    if(_selectedCategory == null){
+      _showMyDialog("Category");
+    }
+    if(_selectedCategory != null && _titleController.text.isEmpty )
+    {
+      _showMyDialog('Title');
+    }
+    if(_image!=null){
     imageUrl = await _uploadFile();
     print("The download URL is " + imageUrl);
-    // Waits till the file is uploaded then stores the download url
-    if(imageUrl != null){
-      final snackBar =
-      SnackBar(content: Text('Image Uploaded'));
-      Scaffold.of(context).showSnackBar(snackBar);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => EditorPage(title: _titleController.text,cat: _selectedCategory,imageUrl: imageUrl,user: name)),);
+      if(imageUrl != null){
+        final snackBar =
+        SnackBar(content: Text('Image Uploaded'));
+        Scaffold.of(context).showSnackBar(snackBar);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EditorPage(title: _titleController.text,cat: _selectedCategory,imageUrl: imageUrl,user: name)),);
+        }
+      }
+    if(_selectedCategory != null && _titleController.text.isNotEmpty && _image == null){
+        _noImageDialog();
     }
+    // Waits till the file is uploaded then stores the download url
   }
 
   Widget _buildCategoryTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.8),
-              border: Border.all(color: Colors.redAccent),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(
-                  color: Colors.grey[800].withOpacity(0.5),
-                  spreadRadius: 3,
-                  blurRadius: 5,
-                  offset: Offset(1.0,0)// changes position of shadow
-              ),]
+    return Padding(
+        padding: EdgeInsets.only(
+            left: 25.0, right: 25.0, top: 2.0),
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Category"
           ),
-          height: 60.0,
-          child: Row(
-            children: <Widget>[
-              SizedBox(width: 10.0,),
-              DropdownButtonHideUnderline(child:DropdownButton<String>(
-                hint: Text("Select Your Category                           ",
+            child: new Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                new Flexible(
+                  child: _selectedCategory == null ? DropdownButton(
+                    value: null,
+                    isDense: true,
+                    onChanged: (String newValue) {
+                      setState((){
+                        _selectedCategory = newValue;
+                      });
+                    },
+                    underline: Container(),
+                    isExpanded: true,
+                    items: _category.map((String value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ): Text(_selectedCategory),
                 ),
-                dropdownColor: Colors.grey.withOpacity(0.8),
-                icon: Icon(Icons.arrow_downward),
-                iconSize: 24,
-                elevation: 16,
-                style: TextStyle(color: Colors.black),
-                value: _selectedCategory,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedCategory = newValue;
-                  });
-                },
-                items: _category.map((category) {
-                  return DropdownMenuItem(
-                    child: new Text(category),
-                    value: category,
-                  );
-                }).toList(),
-              ),)
-            ],
-          ),
-        ),
-      ],
+              ],
+          )
+        )
     );
   }
 
-  Widget _buildTitleTF() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 15.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.8),
-              border: Border.all(color: Colors.redAccent),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(
-                  color: Colors.grey[800].withOpacity(0.5),
-                  spreadRadius: 3,
-                  blurRadius: 5,
-                  offset: Offset(1.0,0)// changes position of shadow
-              ),]
-          ),
-          height: 60.0,
-          child: TextField(
-            controller: _titleController,
-            keyboardType: TextInputType.text,
-            autofocus: true,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(14.0),
-              hintText: 'Title',
-
-            ),
-          ),
-        ),
-      ],
-    );
+  Widget _buildTitle() {
+    return Padding(
+        padding: EdgeInsets.only(
+            left: 25.0, right: 25.0, top: 2.0),
+          child:TextFormField(
+          controller: _titleController,
+          decoration: InputDecoration(labelText: 'Title'),
+          validator: (String value) {
+          if (value.isEmpty) {
+            return 'Name is Required';
+          }
+          return null;
+      },
+    ));
   }
 
   Widget _buildNextBtn() {
@@ -179,7 +215,7 @@ class _WriteScreenState extends State<WriteScreen> {
         child: Text(
           'Next',
           style: TextStyle(
-            color: Colors.redAccent.withOpacity(0.8),
+            color: Color(0xff61A4F1).withOpacity(0.8),
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -218,7 +254,7 @@ class _WriteScreenState extends State<WriteScreen> {
                       Text(
                         'Write Your Post',
                         style: TextStyle(
-                          color: Colors.redAccent,
+                          color: Color(0xff61A4F1),
                           fontFamily: 'OpenSans',
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -227,20 +263,36 @@ class _WriteScreenState extends State<WriteScreen> {
                       SizedBox(height: 10.0,),
                       _buildCategoryTF(),
                       SizedBox(height: 10.0,),
-                      _buildTitleTF(),
+                      _buildTitle(),
                       SizedBox(height: 10.0,),
                       // _buildDesTF(),
                       SizedBox(height: 10.0,),
-                      _image == null ? RaisedButton(
-                        child: Text(
-                            "Image"
-                        ),
-                        textColor: Colors.redAccent,
+                      _image == null ? IconButton(
+                        icon: Icon(Icons.add_a_photo),
+                        tooltip: 'Pick Image',
                         onPressed: pickImage,
-                      ):Column(
+                        iconSize: 75.0,
+                      ):Stack(
                         children: <Widget>[
-                          Image.file(_image),
-                          RaisedButton(child: Text('Change Image'),textColor: Colors.redAccent,onPressed: pickImage,)
+                          Container(
+                            height: 300,
+                            width: 200,
+                            child: Image.file(_image,fit: BoxFit.cover,),
+                          ),
+                          Positioned(
+                            right: 0.0,
+                            top: 0.0,
+                            child: IconButton(
+                              icon: Icon(Icons.cancel),
+                              tooltip: 'Pick Image',
+                              onPressed: (){
+                                setState(() {
+                                  _image=null;
+                                });
+                              },
+                              iconSize: 15.0,
+                            ),
+                          )
                         ],
                       ),
                       _buildNextBtn(),

@@ -202,6 +202,38 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
+
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              decoration: kBoxDecorationStyle,
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 16),
+                              height: 70.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    'Day',
+                                    style: kLabelStyle,
+                                  ),
+                                  DropdownButton(
+                                    items: List.generate(maxday, (index) {
+                                      return DropdownMenuItem(
+                                        child: Text('${index + 1}'),
+                                        value: index + 1,
+                                      );
+                                    }),
+                                    value: day,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        day = v;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+
                             Container(
                               alignment: Alignment.centerLeft,
                               decoration: kBoxDecorationStyle,
@@ -232,36 +264,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                                 ],
                               ),
                             ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              decoration: kBoxDecorationStyle,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              height: 70.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    'Day',
-                                    style: kLabelStyle,
-                                  ),
-                                  DropdownButton(
-                                    items: List.generate(maxday, (index) {
-                                      return DropdownMenuItem(
-                                        child: Text('${index + 1}'),
-                                        value: index + 1,
-                                      );
-                                    }),
-                                    value: day,
-                                    onChanged: (v) {
-                                      setState(() {
-                                        day = v;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+
                             Container(
                               alignment: Alignment.centerLeft,
                               decoration: kBoxDecorationStyle,

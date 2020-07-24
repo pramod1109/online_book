@@ -246,10 +246,16 @@ class _ListScreenState extends State<ListScreen> {
   }
 }
 
-class Story extends StatelessWidget {
+class Story extends StatefulWidget {
   final story;
-
   Story({@required this.story});
+  @override
+  createState() => new StoryState();
+}
+
+class StoryState extends State<Story> {
+
+  var font =18.0;
 
   @override
   Widget build(BuildContext context) {
@@ -259,19 +265,40 @@ class Story extends StatelessWidget {
           title: Image.asset('assets/images/Logo_Bhavatarangini.png',fit: BoxFit.contain, height: 64,
           ),
           backgroundColor: Color(0xff61A4F1),
+          actions: <Widget>[
+            Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  setState(() {
+                    font=font+2;
+                  });
+                },
+              ),
+            ),
+            Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.minimize),
+                onPressed: () {
+                    setState(() {
+                      font=font-2;
+                    });
+                },
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
             child: Html(
-          data: story['story'],
-          style: {
-            "body": Style(
-              fontSize: FontSize(18.0),
-//              color: Colors.white,
-            ),
-//            "h1": Style(
-//              textAlign: TextAlign.center,
-//            ),
-          },
-        )));
+              data: widget.story['story'],
+              style: {
+                "body": Style(
+                  fontSize: FontSize(font),
+                ),
+              },
+            )
+        )
+    );
   }
 }
+
