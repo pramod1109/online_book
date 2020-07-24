@@ -228,16 +228,18 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildSocialBtn(
-                () {Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PhoneLoginScreen()),
-                );},
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PhoneLoginScreen()),
+              );
+            },
             AssetImage(
               'assets/logos/phone.png',
             ),
           ),
           _buildSocialBtn(
-                () => _signInWithGoole(),
+            () => _signInWithGoole(),
             AssetImage(
               'assets/logos/google.jpg',
             ),
@@ -311,7 +313,10 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(height: 100,child:Image.asset('assets/images/Logo_Bhavatarangini.png')),
+                  Container(
+                      height: 100,
+                      child:
+                          Image.asset('assets/images/Logo_Bhavatarangini.png')),
                   SizedBox(height: 20.0),
                   _buildEmailTF(),
                   SizedBox(
@@ -373,10 +378,6 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
     return user;
-  }
-
-  Future<void> _handleSignOut() async {
-    _googleSignIn.disconnect();
   }
 
   void _signInWithEmailAndPassword() async {
