@@ -191,6 +191,7 @@ class _WriteScreenState extends State<WriteScreen> {
             left: 25.0, right: 25.0, top: 2.0),
           child:TextFormField(
           controller: _titleController,
+          maxLength: 15,
           decoration: InputDecoration(labelText: 'Title'),
           validator: (String value) {
           if (value.isEmpty) {

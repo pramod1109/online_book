@@ -126,7 +126,7 @@ class _ListScreenState extends State<ListScreen> {
                                   children: <Widget>[
                                     Container(
                                       decoration: BoxDecoration(
-                                          color: Colors.lightBlueAccent[100],
+
                                           borderRadius: BorderRadius.only(
                                               topRight: Radius.circular(8),
                                               topLeft: Radius.circular(8))),
@@ -184,7 +184,7 @@ class _ListScreenState extends State<ListScreen> {
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                          color: Colors.lightGreenAccent,
+
                                           borderRadius: BorderRadius.only(
                                               topRight: Radius.circular(8),
                                               topLeft: Radius.circular(8))),
@@ -221,7 +221,7 @@ class _ListScreenState extends State<ListScreen> {
                                             child: Icon(
                                               Icons.thumb_up,
                                               color: ds['likes'].contains(uid)
-                                                  ? Colors.white
+                                                  ? Colors.redAccent
                                                   : Colors.black54,
                                               size: 28,
                                             ),
@@ -259,21 +259,30 @@ class _ListScreenState extends State<ListScreen> {
                             borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(8),
                                 bottomRight: Radius.circular(8))),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'చ\nద\nవం\nడి',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'OpenSans',
+                        child: FlatButton(
+                          onPressed: (){Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Story(
+                                  story: ds,
+                                )),
+                          );},
+                          child:Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'చ\nద\nవం\nడి',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'OpenSans',
                               ),
                             ),
                           ],
                         ),
+                      ),
                       )
                     ],
                   ));

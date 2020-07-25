@@ -50,7 +50,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
             controller: _nameController,
             keyboardType: TextInputType.text,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -58,7 +58,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.account_box,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Name',
               hintStyle: kHintTextStyle,
@@ -86,7 +86,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
             keyboardType: TextInputType.number,
             controller: _phoneController,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
@@ -94,7 +94,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.phone,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Phone Number',
               hintStyle: kHintTextStyle,
