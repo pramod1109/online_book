@@ -6,15 +6,16 @@ import 'package:online_book/screens/home_first.dart';
 import 'package:online_book/screens/write_screen.dart';
 
 List<String> _contents = <String>[
-  'Home',
-  'Write',
-  'Notification',
-  'More',
-  'Library'
+  'హోమ్',
+  'గ్రంథాలయం',
+  'రాయండి',
+  'నోటిఫికేషన్స్',
+  ' మారిన్ని',
 ];
 
 class HomeScreen extends StatefulWidget {
   final uid;
+
   HomeScreen({@required this.uid});
 
   @override
@@ -66,20 +67,20 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text(_contents[0]),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.mode_edit),
+          icon: Icon(Icons.library_books),
           title: Text(_contents[1]),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
+          icon: Icon(Icons.mode_edit),
           title: Text(_contents[2]),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.library_books),
-          title: Text(_contents[4]),
+          icon: Icon(Icons.notifications),
+          title: Text(_contents[3]),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.more_vert),
-          title: Text(_contents[3]),
+          title: Text(_contents[4]),
         ),
       ],
     );
@@ -90,38 +91,41 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
         title: 'భావతరంగిణి',
         debugShowCheckedModeBanner: false,
-        home:Scaffold(
-            appBar: AppBar(
-              title: Image.asset('assets/images/Logo_Bhavatarangini.png',fit: BoxFit.contain, height: 64,
-              ),
-              backgroundColor: Color(0xff61A4F1),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.person_outline,
-                    color: Colors.white,
-                    size: 35.0,
-                  ),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
-                  },
+        home: Scaffold(
+          appBar: AppBar(
+            title: Image.asset(
+              'assets/images/Logo_Bhavatarangini.png',
+              fit: BoxFit.contain,
+              height: 64,
+            ),
+            backgroundColor: Color(0xff61A4F1),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.person_outline,
+                  color: Colors.white,
+                  size: 35.0,
                 ),
-              ],
-            ),
-
-            body: BottomNavContents(
-              index: _currentIndex,
-              uid: widget.uid,
-            ),
-            bottomNavigationBar: _myBottomNavBar(),
-    ));
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfileScreen()));
+                },
+              ),
+            ],
+          ),
+          body: BottomNavContents(
+            index: _currentIndex,
+            uid: widget.uid,
+          ),
+          bottomNavigationBar: _myBottomNavBar(),
+        ));
   }
-
 }
 
 class BottomNavContents extends StatelessWidget {
   final int index;
   String uid;
+
   BottomNavContents({this.index, this.uid});
 
   @override
@@ -138,9 +142,9 @@ class BottomNavContents extends StatelessWidget {
       case 0:
         return HomeFirst(uid);
       case 1:
-        return WriteScreen();
-      case 2:
         return Text("Coming soon");
+      case 2:
+        return WriteScreen();
       case 3:
         return Text("Coming soon");
       default:

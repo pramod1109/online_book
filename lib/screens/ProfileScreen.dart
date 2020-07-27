@@ -222,7 +222,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ],
                             )),
-                        Padding(
+                        /*Padding(
                             padding: EdgeInsets.only(
                                 left: 25.0, right: 25.0, top: 25.0),
                             child: new Row(
@@ -241,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                               ],
-                            )),
+
                         Padding(
                             padding: EdgeInsets.only(
                                 left: 25.0, right: 25.0, top: 2.0),
@@ -262,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 ),
                               ],
-                            )),
+                            )),*/
                         Padding(
                             padding: EdgeInsets.only(
                                 left: 25.0, right: 25.0, top: 25.0),
