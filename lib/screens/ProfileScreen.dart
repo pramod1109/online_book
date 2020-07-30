@@ -9,6 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/screens/login_screen.dart';
+import 'package:online_book/screens/subscription.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _mobileController = TextEditingController();
 
   String name, gender;
-  String imageUrl, mobile;
+  String imageUrl, mobile, uid;
   bool imageChanged = false, uploading = false;
 
   File _image;
@@ -39,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         .get()
         .then((value) {
       setState(() {
+        uid = user.uid;
         name = value.data['name'];
         imageUrl = value.data['image'] ?? user.photoUrl;
         mobile = value.data['phone'];
@@ -191,11 +193,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    new Text(
-                                      'Name',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Subscription(widget.uid),
+                                            ));
+                                      },
+                                      child: new Text(
+                                        'Name',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ],
                                 ),
