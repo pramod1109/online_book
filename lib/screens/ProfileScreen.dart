@@ -71,20 +71,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             FlatButton(
                 onPressed: () {
                   if (_status) {
-                    FirebaseAuth.instance.signOut();
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) {
-                      return LoginScreen();
-                    }));
-                  }
-                },
-                child: Text(
-                  'Log Out',
-                  style: TextStyle(color: Colors.blue),
-                )),
-            FlatButton(
-                onPressed: () {
-                  if (_status) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -95,6 +81,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: Text(
                   'Interests',
+                  style: TextStyle(color: Colors.blue),
+                )),
+            FlatButton(
+                onPressed: () {
+                  if (_status) {
+                    FirebaseAuth.instance.signOut();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (_) {
+                      return LoginScreen();
+                    }));
+                  }
+                },
+                child: Text(
+                  'Log Out',
                   style: TextStyle(color: Colors.blue),
                 )),
           ],

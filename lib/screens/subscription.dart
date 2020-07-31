@@ -37,7 +37,7 @@ class _SubscriptionState extends State<Subscription> {
     filterCats = [];
     super.initState();
     Firestore.instance.collection('user').document(widget.uid).get().then((v) {
-      print(v['subscription']);
+//      print(v['subscription']);
       if(v['subscription']!=null)
       filterCats=v['subscription'];
       setState(() {
