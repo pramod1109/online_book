@@ -26,13 +26,13 @@ class PhoneLoginScreen extends StatelessWidget {
                 builder: (context) => PhoneProfileInputScreen(uid,_phoneController.text)
             ));
           }else{
-            print("Error");
+            //print("Error");
           }
 
           //This callback would gets called when verification is done auto maticlly
         },
         verificationFailed: (AuthException exception){
-          print(exception);
+          //print(exception);
         },
         codeSent: (String verificationId, [int forceResendingToken]){
           showDialog(
@@ -67,7 +67,7 @@ class PhoneLoginScreen extends StatelessWidget {
                               builder: (context) => PhoneProfileInputScreen(uid,_phoneController.text)
                           ));
                         }else{
-                          print("Error");
+                          //print("Error");
                         }
                       },
                     )

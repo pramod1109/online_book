@@ -15,7 +15,7 @@ class _IntroScreenState extends State<IntroScreen> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((res) {
-      print(res);
+//      //print(res);
       if (res != null) {
         final snapShot = Firestore.instance
             .collection("user")

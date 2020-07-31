@@ -477,7 +477,7 @@ class _SignUpState extends State<SignUpScreen> {
                 builder: (context) => HomeScreen(uid: value.user.uid)));
       });
     } catch (e) {
-      print(e.message);
+      //print(e.message);
     }
   }
 }

@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
+        onPressed: () => print('Forgot Password'),
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
           'Forgot Password?',
@@ -339,7 +339,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<FirebaseUser> _signInWithGoole() async {
-    print("google signin pressed");
+//    //print("google signin pressed");
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -355,9 +355,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final FirebaseUser user =
         (await _auth.signInWithCredential(credential)).user;
-    print("signed in " + user.displayName);
+//    //print("signed in " + user.displayName);
     if (user != null) {
-      print("sucessfull");
+      //print("sucessfull");
       await Firestore.instance
           .collection("user")
           .document(user.uid)

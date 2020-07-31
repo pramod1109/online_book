@@ -374,7 +374,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
                 )),
       );
     } catch (e) {
-      print(e.message);
+//      //print(e.message);
     }
   }
 }

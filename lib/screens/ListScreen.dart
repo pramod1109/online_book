@@ -22,7 +22,7 @@ class _ListScreenState extends State<ListScreen> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((res) {
-      print(res);
+//      //print(res);
       uid = res.uid;
     });
   }
@@ -43,10 +43,11 @@ class _ListScreenState extends State<ListScreen> {
         backgroundColor: Color(0xff61A4F1),
       ),
       body: StreamBuilder(
-        stream: Firestore.instance.collection(widget.cat).snapshots(),
+        stream: Firestore.instance.collection('categories').document(widget.cat).collection('books').snapshots(),
         builder: (BuildContext content, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData)
+          if (snapshot.connectionState == ConnectionState.waiting)
             return Center(child: CircularProgressIndicator());
+          if(snapshot.hasData && snapshot.data.documents.length!=0)
           return new ListView.builder(
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
@@ -290,6 +291,7 @@ class _ListScreenState extends State<ListScreen> {
               );
             },
           );
+          return Center(child: Text('No Books'));
         },
       ),
     );
@@ -308,7 +310,7 @@ class StoryState extends State<Story> {
 
   @override
   Widget build(BuildContext context) {
-    print("read");
+//    //print("read");
     return Scaffold(
         appBar: AppBar(
           title: Image.asset(

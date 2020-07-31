@@ -32,7 +32,7 @@ class _WriteScreenState extends State<WriteScreen> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser().then((res) {
-      print(res);
+      //print(res);
       String uid=res.uid;
       final snapShot = Firestore.instance
           .collection("user")
@@ -59,7 +59,7 @@ class _WriteScreenState extends State<WriteScreen> {
       final StorageUploadTask task = storageRef.putFile(_image);
       return await (await task.onComplete).ref.getDownloadURL();
     } catch (error) {
-      print(error.toString());
+      //print(error.toString());
     }
   }
 
@@ -135,7 +135,7 @@ class _WriteScreenState extends State<WriteScreen> {
     }
     if(_image!=null){
     imageUrl = await _uploadFile();
-    print("The download URL is " + imageUrl);
+//    //print("The download URL is " + imageUrl);
       if(imageUrl != null){
         final snackBar =
         SnackBar(content: Text('Image Uploaded'));
@@ -401,7 +401,7 @@ class EditorPageState extends State<EditorPage> {
 
   final databaseReference = Firestore.instance;
   void _pushToCloud(String html) {
-    print(_controller);
+//    //print(_controller);
     databaseReference.collection("request").add(
         {
           "imageUrl" :widget.imageUrl,
@@ -410,7 +410,7 @@ class EditorPageState extends State<EditorPage> {
           "category" : widget.cat,
           "title": widget.title,
         }).then((value){
-      print(value.documentID);
+//      //print(value.documentID);
     });
     _showMyDialog();
     // if(databaseReference.collection('request').document(id).get()!=null)

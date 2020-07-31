@@ -81,7 +81,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Text(
                   'Log Out',
                   style: TextStyle(color: Colors.blue),
-                ))
+                )),
+            FlatButton(
+                onPressed: () {
+                  if (_status) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Subscription(uid),
+                        ));
+                  }
+                },
+                child: Text(
+                  'Interests',
+                  style: TextStyle(color: Colors.blue),
+                )),
           ],
         ),
         body: Stack(
@@ -193,21 +208,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Subscription(widget.uid),
-                                            ));
-                                      },
-                                      child: new Text(
-                                        'Name',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                    new Text(
+                                      'Name',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -527,7 +532,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final StorageUploadTask task = storageRef.putFile(_image);
       return await (await task.onComplete).ref.getDownloadURL();
     } catch (error) {
-      print(error.toString());
+//      //print(error.toString());
       throw error.toString();
     }
   }

@@ -30,12 +30,20 @@ class _SubscriptionState extends State<Subscription> {
     'కార్టూన్  వ్యాఖ్య'
   ];
 
-  List<String> filterCats = List<String>();
+  List<dynamic> filterCats;
 
   @override
   void initState() {
     filterCats = [];
     super.initState();
+    Firestore.instance.collection('user').document(widget.uid).get().then((v) {
+      print(v['subscription']);
+      if(v['subscription']!=null)
+      filterCats=v['subscription'];
+      setState(() {
+
+      });
+    });
   }
 
   @override
@@ -45,7 +53,22 @@ class _SubscriptionState extends State<Subscription> {
         title: Text('ఇష్టాలు'),
         actions: <Widget>[
           FlatButton(
-            onPressed: () {},
+            onPressed: () async {
+              await Firestore.instance.collection('user').document(widget.uid).updateData({
+                'subscription':filterCats
+              });
+              for(int i=0;i<categories.length;i++){
+                if(filterCats.contains(categories[i]))
+                await Firestore.instance.collection('categories').document(categories[i]).updateData({
+                  'subscription':FieldValue.arrayUnion([widget.uid])
+                });
+                else
+                await Firestore.instance.collection('categories').document(categories[i]).updateData({
+                  'subscription':FieldValue.arrayRemove([widget.uid])
+                });
+              }
+              Navigator.pop(context);
+            },
             child: Text(
               'అయిపోయింది',
               style: TextStyle(color: Colors.white),
@@ -58,7 +81,7 @@ class _SubscriptionState extends State<Subscription> {
           child: Column(
             children: List.generate(
                 categories.length,
-                (index) => InkWell(
+                (index) {return InkWell(
                       onTap: () {
                         if (!filterCats.contains(categories[index]))
                           filterCats.add(categories[index]);
@@ -85,7 +108,7 @@ class _SubscriptionState extends State<Subscription> {
                           ],
                         ),
                       ),
-                    )),
+                    );}),
           ),
         ),
       ),
