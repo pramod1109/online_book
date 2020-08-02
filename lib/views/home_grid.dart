@@ -16,21 +16,21 @@ class GridList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: GridView.count(
-      padding: EdgeInsets.all(10.0),
-      crossAxisCount: 2,
-      controller: new ScrollController(keepScrollOffset: false),
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      childAspectRatio: (600.0 / 400.0),
-      mainAxisSpacing: 0.5,
-      crossAxisSpacing: 0.5,
-      children: <Widget>[
-        Container(
-            padding: EdgeInsets.all(7.0),
-            child: FlatButton(
-              child: Container(
-                child: Center(
-                    child: Text("కథలు",
+          padding: EdgeInsets.all(10.0),
+          crossAxisCount: 2,
+          controller: new ScrollController(keepScrollOffset: false),
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          childAspectRatio: (600.0 / 400.0),
+          mainAxisSpacing: 0.5,
+          crossAxisSpacing: 0.5,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(7.0),
+              child: FlatButton(
+                child: Container(
+                  child: Center(
+                      child: Text("కథలు",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w300,
@@ -52,20 +52,21 @@ class GridList extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListScreen(
-                            cat: "కథలు",
-                            uid: uid,
-                          )),
-                );
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ListScreen(
+                              cat: "కథలు",
+                              uid: uid,
+                        )
+                    ),
+                  );
               },
               padding: EdgeInsets.all(0.0),
             )),
-        Container(
+          Container(
             padding: EdgeInsets.all(7.0),
             child: FlatButton(
               child: Container(
@@ -647,7 +648,8 @@ class GridList extends StatelessWidget {
               padding: EdgeInsets.all(0.0),
             )),
       ],
-    ));
+      )
+    );
   }
 
   int next(int min, int max) => min + _random.nextInt(max - min);

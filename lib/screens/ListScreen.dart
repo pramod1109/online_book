@@ -53,13 +53,14 @@ class _ListScreenState extends State<ListScreen> {
             itemBuilder: (context, index) {
               DocumentSnapshot ds = snapshot.data.documents[index];
               return Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Stack(
                 children: <Widget>[
-                  Transform.translate(
-                    offset: Offset(22.0, 22.0),
+                  SizedBox(height: 10.0,),
+                  Center(
                     child: Container(
-                      width: 350.0,
+                      padding: EdgeInsets.only(top:10.0),
+                      width: 375.0,
                       height: 125.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
@@ -75,8 +76,7 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(22.0, 22.0),
+                  Positioned(
                     child: Container(
                       width: 84.0,
                       height: 125.0,
@@ -93,8 +93,9 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(265.0, 38.0),
+                  Positioned(
+                    top:7.5,
+                    right: 20.0,
                     child: RaisedButton(
                       elevation: 5.0,
                       onPressed: (){
@@ -122,33 +123,38 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(124.0, 38.0),
-                    child: FlatButton(
-                      onPressed: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Story(
-                              story: ds,
-                            )),
-                      );
-                    },
-                      child: Text(
-                        ds['title'],
-                      style: TextStyle(
-                        fontFamily: 'Book Antiqua',
-                        fontSize: 28,
-                        color: const Color(0xff707070),
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    )
+                  Positioned(
+                    left: 80.0,
+                     child: Container(
+                       padding: EdgeInsets.only(top: 5.0),
+                       width: 150.0,
+                         child: FlatButton(
+                          onPressed: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Story(
+                                  story: ds,
+                                )),
+                            );
+                          },
+                          child: Text(
+                            ds['title'],
+                            style: TextStyle(
+                            fontFamily: 'Book Antiqua',
+                            fontSize: 24,
+                            color: const Color(0xff707070),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ))
                   ),
-                  Transform.translate(
-                    offset: Offset(124.0, 76.0),
+                  Positioned(
+                    left: 100.0,
+                    top: 60.0,
+                    //offset: Offset(124.0, 76.0),
                     child: Text(
-              "రచయిత: " + ds['author'],
+                  "రచయిత: " + ds['author'],
                       style: TextStyle(
                         fontFamily: 'Segoe UI',
                         fontSize: 16,
@@ -157,8 +163,10 @@ class _ListScreenState extends State<ListScreen> {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(124.0, 109.0),
+                  Positioned(
+                    top: 90.0,
+                    left: 100.0,
+                    //offset: Offset(124.0, 109.0),
                     child: Text(
                       ds['reads'].toString() + " views",
                       style: TextStyle(
@@ -169,8 +177,10 @@ class _ListScreenState extends State<ListScreen> {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(177.0, 109.0),
+                  Positioned(
+                    top: 90.0,
+                    left: 150.0,
+                    //offset: Offset(177.0, 109.0),
                     child: Container(
                       width: 80.0,
                       height: 20.0,
@@ -190,8 +200,10 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(269.0, 94.0),
+                  Positioned(
+                    top:80.0,
+                    right: 80.0,
+                    //offset: Offset(269.0, 94.0),
                     child: Container(
                       width: 29.0,
                       height: 20.0,
@@ -227,8 +239,10 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(314.0, 94.0),
+                  Positioned(
+                    top:80.0,
+                    right: 30.0,
+                    //offset: Offset(314.0, 94.0),
                     child: Container(
                       width: 29.0,
                       height: 20.0,
@@ -262,8 +276,10 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(276.0, 117.0),
+                  Positioned(
+                    top:102.5,
+                    right: 90.0,
+                    //offset: Offset(276.0, 117.0),
                     child: Text(
                       ds['likes'].length.toString(),
                       style: TextStyle(
@@ -274,8 +290,10 @@ class _ListScreenState extends State<ListScreen> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(325.0, 117.0),
+                  Positioned(
+                    top:102.5,
+                    right: 40.0,
+                    //offset: Offset(325.0, 117.0),
                     child: Text(
                       ds['share'].toString(),
                       style: TextStyle(
