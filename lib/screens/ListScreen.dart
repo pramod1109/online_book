@@ -94,9 +94,10 @@ class _ListScreenState extends State<ListScreen> {
                     ),
                   ),
                   Positioned(
-                    top:7.5,
-                    right: 20.0,
+                   top:7.5,
+                    right:7.5,
                     child: RaisedButton(
+                      padding: EdgeInsets.only(top: 7.5,right: 7.5),
                       elevation: 5.0,
                       onPressed: (){
                         Navigator.push(
@@ -127,7 +128,7 @@ class _ListScreenState extends State<ListScreen> {
                     left: 80.0,
                      child: Container(
                        padding: EdgeInsets.only(top: 5.0),
-                       width: 150.0,
+                       width: 140.0,
                          child: FlatButton(
                           onPressed: (){
                           Navigator.push(
@@ -140,6 +141,7 @@ class _ListScreenState extends State<ListScreen> {
                           },
                           child: Text(
                             ds['title'],
+                            //"efiwbfiwbfiwebfeib",
                             style: TextStyle(
                             fontFamily: 'Book Antiqua',
                             fontSize: 24,
@@ -201,8 +203,8 @@ class _ListScreenState extends State<ListScreen> {
                     ),
                   ),
                   Positioned(
-                    top:80.0,
-                    right: 80.0,
+                    bottom: 30.0,
+                    right: 55.0,
                     //offset: Offset(269.0, 94.0),
                     child: Container(
                       width: 29.0,
@@ -240,8 +242,8 @@ class _ListScreenState extends State<ListScreen> {
                     ),
                   ),
                   Positioned(
-                    top:80.0,
-                    right: 30.0,
+                    bottom:30.0,
+                     right: 10.0,
                     //offset: Offset(314.0, 94.0),
                     child: Container(
                       width: 29.0,
@@ -277,8 +279,8 @@ class _ListScreenState extends State<ListScreen> {
                     ),
                   ),
                   Positioned(
-                    top:102.5,
-                    right: 90.0,
+                    bottom:10.0,
+                    right: 65.0,
                     //offset: Offset(276.0, 117.0),
                     child: Text(
                       ds['likes'].length.toString(),
@@ -291,8 +293,8 @@ class _ListScreenState extends State<ListScreen> {
                     ),
                   ),
                   Positioned(
-                    top:102.5,
-                    right: 40.0,
+                    bottom:10,
+                    right: 20,
                     //offset: Offset(325.0, 117.0),
                     child: Text(
                       ds['share'].toString(),
