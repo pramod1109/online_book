@@ -230,25 +230,6 @@ class _SignUpState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (month == 1 ||
-        month == 3 ||
-        month == 5 ||
-        month == 7 ||
-        month == 8 ||
-        month == 10 ||
-        month == 12) {
-      maxday = 31;
-    } else if (month == 2) {
-      if (int.parse(year) % 4 == 0 &&
-          (int.parse(year) % 100 != 0 ||
-              (int.parse(year) % 100 == 0 && int.parse(year) % 400 == 0))) {
-        maxday = 29;
-      } else {
-        maxday = 28;
-      }
-    } else {
-      maxday = 30;
-    }
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         key: _formKey,
@@ -292,110 +273,6 @@ class _SignUpState extends State<SignUpScreen> {
                         _buildPasswordTF(),
                         SizedBox(height: 20.0),
                         _buildPhoneTF(),
-                        SizedBox(height: 20.0),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Date of Birth',
-                            style: kLabelStyle,
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              decoration: kBoxDecorationStyle,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              height: 70.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    'Month',
-                                    style: kLabelStyle,
-                                  ),
-                                  DropdownButton(
-                                    items: List.generate(12, (index) {
-                                      return DropdownMenuItem(
-                                        child: Text('${index + 1}'),
-                                        value: index + 1,
-                                      );
-                                    }),
-                                    value: month,
-                                    onChanged: (v) {
-                                      setState(() {
-                                        month = v;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              decoration: kBoxDecorationStyle,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              height: 70.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    'Day',
-                                    style: kLabelStyle,
-                                  ),
-                                  DropdownButton(
-                                    items: List.generate(maxday, (index) {
-                                      return DropdownMenuItem(
-                                        child: Text('${index + 1}'),
-                                        value: index + 1,
-                                      );
-                                    }),
-                                    value: day,
-                                    onChanged: (v) {
-                                      setState(() {
-                                        day = v;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              decoration: kBoxDecorationStyle,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              height: 70.0,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    'Year',
-                                    style: kLabelStyle,
-                                  ),
-                                  DropdownButton(
-                                    items: List.generate(100, (index) {
-                                      return DropdownMenuItem(
-                                        child: Text('${1920 + index}'),
-                                        value: '${1920 + index}',
-                                      );
-                                    }),
-                                    value: year,
-                                    onChanged: (v) {
-                                      setState(() {
-                                        year = v;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
                         SizedBox(height: 20.0),
                         Container(
                           alignment: Alignment.centerLeft,

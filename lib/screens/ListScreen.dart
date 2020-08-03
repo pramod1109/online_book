@@ -53,10 +53,9 @@ class _ListScreenState extends State<ListScreen> {
             itemBuilder: (context, index) {
               DocumentSnapshot ds = snapshot.data.documents[index];
               return Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Stack(
                 children: <Widget>[
-                  SizedBox(height: 10.0,),
                   Center(
                     child: Container(
                       padding: EdgeInsets.only(top:10.0),
@@ -88,18 +87,24 @@ class _ListScreenState extends State<ListScreen> {
                            NetworkImage(ds['imageUrl']),
                           fit: BoxFit.fill,
                         ),
-                        color: const Color(0xffffffff),
-                        border: Border.all(width: 1.0, color: const Color(0xff707070)),
                       ),
                     ),
                   ),
                   Positioned(
-                   top:7.5,
-                    right:7.5,
+                    top: 5,
+                    right: 7.5,
                     child: RaisedButton(
                       padding: EdgeInsets.only(top: 7.5,right: 7.5),
                       elevation: 5.0,
-                      onPressed: (){
+                      onPressed: ()  async {
+                        await Firestore.instance
+                            .collection('categories')
+                            .document(widget.cat)
+                            .collection('books')
+                            .document(ds.documentID)
+                            .updateData({
+                          'reads': ds['reads']+1
+                        });
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -112,23 +117,27 @@ class _ListScreenState extends State<ListScreen> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       color: Colors.redAccent,
-                      child: Text(
-                        'చదవండి',
-                        style: TextStyle(
-                          color: Colors.white,
-                          letterSpacing: 1.0,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: 'OpenSans',
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child:Text(
+                          'చదవండి',
+                          style: TextStyle(
+                            color: Colors.white,
+                            letterSpacing: 1.0,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w300,
+                            fontFamily: 'OpenSans',
+                          ),
                         ),
-                      ),
+                      )
                     ),
                   ),
                   Positioned(
                     left: 80.0,
                      child: Container(
                        padding: EdgeInsets.only(top: 5.0),
-                       width: 140.0,
+                       width: 150.0,
+                         height: 60.0 ,
                          child: FlatButton(
                           onPressed: (){
                           Navigator.push(
@@ -153,7 +162,7 @@ class _ListScreenState extends State<ListScreen> {
                   ),
                   Positioned(
                     left: 100.0,
-                    top: 60.0,
+                    top: 62.0,
                     //offset: Offset(124.0, 76.0),
                     child: Text(
                   "రచయిత: " + ds['author'],
@@ -213,7 +222,9 @@ class _ListScreenState extends State<ListScreen> {
                         onTap: () async {
                           if (!ds['likes'].contains(uid)) {
                             await Firestore.instance
-                                .collection(widget.cat)
+                                .collection('categories')
+                                .document(widget.cat)
+                                .collection('books')
                                 .document(ds.documentID)
                                 .updateData({
                               'likes':
@@ -222,7 +233,9 @@ class _ListScreenState extends State<ListScreen> {
                             });
                           } else {
                             await Firestore.instance
-                                .collection(widget.cat)
+                                .collection('categories')
+                                .document(widget.cat)
+                                .collection('books')
                                 .document(ds.documentID)
                                 .updateData({
                               'likes':
@@ -255,14 +268,16 @@ class _ListScreenState extends State<ListScreen> {
                                   (transaction) async {
                                 var predata = await transaction
                                     .get(Firestore.instance
-                                    .collection(widget.cat)
-                                    .document(
-                                    ds.documentID));
+                                    .collection('categories')
+                                    .document(widget.cat)
+                                    .collection('books')
+                                    .document(ds.documentID));
                                 await transaction.update(
                                     Firestore.instance
-                                        .collection(widget.cat)
-                                        .document(
-                                        ds.documentID),
+                                        .collection('categories')
+                                        .document(widget.cat)
+                                        .collection('books')
+                                        .document(ds.documentID),
                                     {
                                       'share': predata
                                           .data['share'] +
@@ -311,7 +326,7 @@ class _ListScreenState extends State<ListScreen> {
               );
             },
           );
-          return Center(child: Text('No Books'));
+          return Center(child: Text("no "+widget.cat));
         },
       ),
     );
@@ -326,18 +341,14 @@ class Story extends StatefulWidget {
 }
 
 class StoryState extends State<Story> {
-  var font = 18.0;
+  var font = 34.0;
 
   @override
   Widget build(BuildContext context) {
 //    //print("read");
     return Scaffold(
         appBar: AppBar(
-          title: Image.asset(
-            'assets/images/Logo_Bhavatarangini.png',
-            fit: BoxFit.contain,
-            height: 64,
-          ),
+          title: Text(widget.story['title']),
           backgroundColor: Color(0xff61A4F1),
           actions: <Widget>[
             Builder(

@@ -70,7 +70,7 @@ class _SubscriptionState extends State<Subscription> {
               Navigator.pop(context);
             },
             child: Text(
-              'అయిపోయింది',
+              'save',
               style: TextStyle(color: Colors.white),
             ),
           )
