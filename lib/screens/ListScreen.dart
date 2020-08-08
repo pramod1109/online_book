@@ -334,14 +334,32 @@ class _ListScreenState extends State<ListScreen> {
 }
 
 class Story extends StatefulWidget {
-  final story;
-  Story({@required this.story});
+  var story;
+  String cat,book_id;
+  Story({this.story,this.cat,this.book_id});
   @override
   createState() => new StoryState();
 }
 
 class StoryState extends State<Story> {
   var font = 34.0;
+  var book = null;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.cat!=null){
+      getBook();
+    }
+  }
+
+  getBook()async{
+    await Firestore.instance.collection('categories').document(widget.cat).collection('books').document(widget.book_id).get().then((value) {
+      setState(() {
+        book = value.data;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +392,14 @@ class StoryState extends State<Story> {
           ],
         ),
         body: SingleChildScrollView(
-            child: Html(
+            child: widget.cat!=null?book!=null?Html(
+              data: book['story'],
+              style: {
+                "body": Style(
+                  fontSize: FontSize(font),
+                ),
+              },
+            ):LinearProgressIndicator():Html(
           data: widget.story['story'],
           style: {
             "body": Style(

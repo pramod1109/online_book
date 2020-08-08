@@ -63,9 +63,19 @@ class _NotificationsState extends State<Notifications> {
                                           top:
                                               BorderSide(color: Colors.black))),
                               child: ListTile(
-                                onTap: (){
-                                  if(snap['notifications'][index]['type']=='New Book'){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Story(book_id: snap['notifications'][index]['book_id'],cat: snap['notifications'][index]['category'],),));
+                                onTap: () {
+                                  if (snap['notifications'][index]['type'] ==
+                                      'New Book') {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Story(
+                                            book_id: snap['notifications']
+                                                [index]['book_id'],
+                                            cat: snap['notifications'][index]
+                                                ['category'],
+                                          ),
+                                        ));
                                   }
                                 },
                                 title: Text(
