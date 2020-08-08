@@ -366,7 +366,7 @@ class StoryState extends State<Story> {
 //    //print("read");
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.story['title']),
+          title: Text(widget.cat!=null?book!=null?book['title']:'':widget.story['title']),
           backgroundColor: Color(0xff61A4F1),
           actions: <Widget>[
             Builder(
