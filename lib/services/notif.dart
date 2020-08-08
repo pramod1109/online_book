@@ -41,6 +41,7 @@ class NotificationHandler {
       token = await fcm.getToken();
       initialized = true;
     }
+    print(token);
     return token;
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_book/screens/ProfileScreen.dart';
 import 'package:online_book/screens/home_first.dart';
+import 'package:online_book/screens/notifications.dart';
 import 'package:online_book/screens/write_screen.dart';
 
 List<String> _contents = <String>[
@@ -131,9 +132,7 @@ class BottomNavContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
-        child: navBarContents(index, context),
-      ),
+      child: navBarContents(index, context),
     );
   }
 
@@ -146,7 +145,7 @@ class BottomNavContents extends StatelessWidget {
       case 2:
         return WriteScreen();
       case 3:
-        return Text("Coming soon");
+        return Notifications(uid: uid,);
       default:
         return Text("Coming soon");
     }
