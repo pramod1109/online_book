@@ -153,35 +153,40 @@ class _WriteScreenState extends State<WriteScreen> {
     return Padding(
         padding: EdgeInsets.only(
             left: 25.0, right: 25.0, top: 2.0),
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: "Category"
-          ),
             child: new Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 new Flexible(
-                  child: _selectedCategory == null ? DropdownButton(
-                    value: null,
-                    isDense: true,
-                    onChanged: (String newValue) {
-                      setState((){
-                        _selectedCategory = newValue;
-                      });
-                    },
-                    underline: Container(),
+                  child: DropdownButton(
+                    hint: _selectedCategory == null
+                        ? Text('Category')
+                        : Text(
+                      _selectedCategory,
+                      style: TextStyle(color: Colors.black),
+                    ),
                     isExpanded: true,
-                    items: _category.map((String value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
+                    iconSize: 30.0,
+                    style: TextStyle(color: Colors.blue),
+                    items: _category.map(
+                          (val) {
+                        return DropdownMenuItem<String>(
+                          value: val,
+                          child: Text(val),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (val) {
+                      setState(
+                            () {
+                              _selectedCategory = val;
+                        },
                       );
-                    }).toList(),
-                  ): Text(_selectedCategory),
+                    },
+                  ),
                 ),
               ],
           )
-        )
+
     );
   }
 
@@ -209,6 +214,7 @@ class _WriteScreenState extends State<WriteScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: _next,
+        color:  Color(0xff61A4F1).withOpacity(0.8),
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -216,7 +222,7 @@ class _WriteScreenState extends State<WriteScreen> {
         child: Text(
           'Next',
           style: TextStyle(
-            color: Color(0xff61A4F1).withOpacity(0.8),
+            color: Colors.white,
             letterSpacing: 1.5,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -253,7 +259,7 @@ class _WriteScreenState extends State<WriteScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Write Your Post',
+                        'ఇక్కడ వ్రాయండి',
                         style: TextStyle(
                           color: Color(0xff61A4F1),
                           fontFamily: 'OpenSans',
@@ -327,6 +333,8 @@ class EditorPageState extends State<EditorPage> {
   FocusNode _focusNode;
   String docUrl;
   final converter = NotusHtmlCodec();
+  File file;
+  final contents=null;
 
   @override
   void initState() {
@@ -373,14 +381,8 @@ class EditorPageState extends State<EditorPage> {
   /// Loads the document asynchronously from a file if it exists, otherwise
   /// returns default document.
   Future<NotusDocument> _loadDocument() async {
-    final file = File(Directory.systemTemp.path + "/quick_start.json");
-    if (await file.exists()) {
-      final contents = await file
-          .readAsString()
-          .then((data) => Future.delayed(Duration(seconds: 1), () => data));
-      return NotusDocument.fromJson(jsonDecode(contents));
-    }
-    final Delta delta = Delta()..insert("Zefyr Quick Start\n");
+    file = File(Directory.systemTemp.path + "/quick_start.json");
+    final Delta delta = Delta()..insert("మీ రచనను ఇక్కడ రాయండి\n");
     return NotusDocument.fromDelta(delta);
   }
 
@@ -390,7 +392,7 @@ class EditorPageState extends State<EditorPage> {
     // `jsonEncode` directly:
     final contents = jsonEncode(_controller.document);
     // For this example we save our document to a temporary file.
-    final file = File(Directory.systemTemp.path + "/quick_start.json");
+    file = File(Directory.systemTemp.path + "/quick_start.json");
     // And show a snack bar on success.
     file.writeAsString(contents).then((_) async {
       StorageUploadTask uploadTask = reference.putFile(file);
@@ -426,14 +428,18 @@ class EditorPageState extends State<EditorPage> {
             child: ListBody(
               children: <Widget>[
                 Text('Your write is uploaded'),
-                Text('Would you like to approve?'),
+                Text('Confirm Submission'),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Approve'),
+              child: Text('Confirm'),
               onPressed: () {
+                setState(() {
+                  _controller=null;
+                  file=null;
+                });
                 Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
               },
             ),

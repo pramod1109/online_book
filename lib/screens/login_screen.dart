@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String _userEmail;
   bool _rememberMe = false;
   bool _isLoggedIn = false;
+  String errorMessage;
 
   GoogleSignInAccount _currentUser;
   @override
@@ -37,6 +38,88 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     });
     _googleSignIn.signInSilently();
+  }
+
+  Future<void> _showMyDialog(String mis) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Conformation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('$mis field is left empty'),
+                Text('Please do update it'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> _errorDialog(String mis) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Conformation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('$mis'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _wrongPassDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Conformation'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Your Email ID or password is wrong please try again'),
+                Text('Please try again'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildEmailTF() {
@@ -115,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       alignment: Alignment.centerRight,
       child: FlatButton(
-        onPressed: () => print('Forgot Password'),
+        onPressed: () {},
         padding: EdgeInsets.only(right: 0.0),
         child: Text(
           'Forgot Password?',
@@ -381,24 +464,61 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _signInWithEmailAndPassword() async {
-    final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
-    ))
-        .user;
-    if (user != null) {
-      setState(() {
-        _success = true;
-        _userEmail = user.email;
-      });
-    } else {
-      _success = false;
-    }
-    if (user != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen(uid: user.uid)),
-      );
+    try {
+      if (_emailController == null || _emailController.text.isEmpty) {
+        _showMyDialog("Email");
+      }
+      if ((_emailController.text.isNotEmpty || _emailController != null) &&
+          (_passwordController == null || _passwordController.text.isEmpty)) {
+        _showMyDialog("Password");
+      }
+      else {
+        final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        )).user;
+        if (user != null) {
+          setState(() {
+            _success = true;
+            _userEmail = user.email;
+          });
+        } else {
+          _success = false;
+        }
+        if (user != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen(uid: user.uid)),
+          );
+        }
+        if (user == null) {
+          _wrongPassDialog();
+        }
+      }
+    } catch(e){
+      switch (e.code) {
+        case "ERROR_INVALID_EMAIL":
+          errorMessage = "Your email address appears to be malformed.";
+          break;
+        case "ERROR_WRONG_PASSWORD":
+          errorMessage = "Your password is wrong.";
+          break;
+        case "ERROR_USER_NOT_FOUND":
+          errorMessage = "User with this email doesn't exist.";
+          break;
+        case "ERROR_USER_DISABLED":
+          errorMessage = "User with this email has been disabled.";
+          break;
+        case "ERROR_TOO_MANY_REQUESTS":
+          errorMessage = "Too many requests. Try again later.";
+          break;
+        case "ERROR_OPERATION_NOT_ALLOWED":
+          errorMessage = "Signing in with Email and Password is not enabled.";
+          break;
+        default:
+          errorMessage = "An undefined Error happened.";
+      }
+      _errorDialog(errorMessage);
     }
   }
 }
