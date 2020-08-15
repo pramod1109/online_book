@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_book/screens/homescreen.dart';
+import 'package:online_book/screens/intro_screen.dart';
 import 'package:online_book/screens/login_screen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -351,7 +352,7 @@ class _SignUpState extends State<SignUpScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => HomeScreen(uid: value.user.uid)));
+                builder: (context) => IntroScreen()));
       });
     } catch (e) {
       //print(e.message);

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_book/screens/ProfileScreen.dart';
 import 'package:online_book/screens/home_first.dart';
+import 'package:online_book/screens/library.dart';
 import 'package:online_book/screens/notifications.dart';
 import 'package:online_book/screens/write_screen.dart';
 
@@ -141,7 +142,7 @@ class BottomNavContents extends StatelessWidget {
       case 0:
         return HomeFirst(uid);
       case 1:
-        return Text("Coming soon");
+        return Library();
       case 2:
         return WriteScreen();
       case 3:

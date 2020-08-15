@@ -5,6 +5,7 @@ import 'package:online_book/screens/homescreen.dart';
 import 'package:online_book/screens/login_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_book/services/notif.dart';
+import 'package:online_book/services/storage.dart';
 
 class IntroScreen extends StatefulWidget {
   @override
@@ -26,6 +27,7 @@ class _IntroScreenState extends State<IntroScreen> {
           if (value.data != null) {
             String nt = await NotificationHandler.instance.init(context);
             await Firestore.instance.collection('user').document(res.uid).updateData({'notif_token':nt});
+            Storage.user = value.data;
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen(uid: res.uid)),

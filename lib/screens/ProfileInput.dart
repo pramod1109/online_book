@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:online_book/screens/homescreen.dart';
+import 'package:online_book/screens/intro_screen.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -243,9 +244,7 @@ class _ProfileInputState extends State<ProfileInputScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => HomeScreen(
-                  uid: widget.uid,
-                )),
+            builder: (context) => IntroScreen()),
       );
     } catch (e) {
 //      //print(e.message);

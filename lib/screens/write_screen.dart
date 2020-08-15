@@ -433,6 +433,7 @@ class EditorPageState extends State<EditorPage> {
             ),
           ),
           actions: <Widget>[
+
             FlatButton(
               child: Text('Confirm'),
               onPressed: () {

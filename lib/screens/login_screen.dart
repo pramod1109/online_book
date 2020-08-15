@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_book/screens/ProfileInput.dart';
 import 'package:online_book/screens/homescreen.dart';
+import 'package:online_book/screens/intro_screen.dart';
 import 'package:online_book/screens/phone_login.dart';
 import 'package:online_book/screens/signup_screen.dart';
+import 'package:online_book/services/storage.dart';
 import 'package:online_book/utilites/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -447,6 +449,9 @@ class _LoginScreenState extends State<LoginScreen> {
           .get()
           .then((value) {
         if (value.data != null) {
+          setState(() {
+            Storage.user=value.data;
+          });
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen(uid: user.uid)),
@@ -488,7 +493,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (user != null) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen(uid: user.uid)),
+            MaterialPageRoute(builder: (context) => IntroScreen()),
           );
         }
         if (user == null) {
